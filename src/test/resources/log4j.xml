@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<!DOCTYPE log4j:configuration SYSTEM 'log4j.dtd'>
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <!-- ******************************************************************* -->
+    <!-- *                           Appenders                             * -->
+    <!-- ******************************************************************* -->
+
+    <appender name='appender.console' class='org.apache.log4j.ConsoleAppender'>
+        <layout class='org.apache.log4j.PatternLayout'>
+            <param name='ConversionPattern' value='%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}::%m%n'/>
+        </layout>
+    </appender>
+
+    <!-- ******************************************************************* -->
+    <!-- *                           Categories                            * -->
+    <!-- ******************************************************************* -->
+
+    <category name='net.chriswareham'>
+        <priority value='DEBUG'/>
+    </category>
+
+    <!-- ******************************************************************* -->
+    <!-- *                            Default                              * -->
+    <!-- ******************************************************************* -->
+
+    <root>
+        <priority value='WARN'/>
+        <appender-ref ref='appender.console'/>
+    </root>
+
+</log4j:configuration>

@@ -1,0 +1,7 @@
+<?xml version='1.0'?>
+<!DOCTYPE components PUBLIC "-//Superfly//DTD Components 1.0//EN" "http://www.chriswareham.net/DTD/components.dtd">
+<components>
+
+    <component id="includeComponent" class="net.chriswareham.di.TestComponentImpl"/>
+
+</components>

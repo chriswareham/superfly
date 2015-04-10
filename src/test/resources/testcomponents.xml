@@ -1,0 +1,81 @@
+<?xml version='1.0'?>
+<!DOCTYPE components PUBLIC "-//Superfly//DTD Components 1.0//EN" "http://www.chriswareham.net/DTD/components.dtd">
+<components>
+
+    <include path="/testincludecomponents.xml"/>
+
+    <component id="testComponent" class="net.chriswareham.di.TestComponentImpl" instantiation="immediate"/>
+
+    <component id="testPrototypeComponent" class="net.chriswareham.di.TestComponentImpl" instantiation="demand"/>
+
+    <component id="prototypeComponent" class="net.chriswareham.di.TestComponentImpl" instantiation="demand"/>
+
+    <component id="component" class="net.chriswareham.di.TestComponentImpl" startup="startup" shutdown="shutdown">
+        <property name="managedName" value="TestComponentImpl:key=value"/>
+        <property name="reference" refid="testComponent"/>
+        <property name="prototypeReference" refid="testPrototypeComponent"/>
+        <property name="stringProperty" value="string"/>
+        <property name="booleanProperty" value="true"/>
+        <property name="intProperty" value="1"/>
+        <property name="longProperty" value="10"/>
+        <property name="floatProperty" value="100.0"/>
+        <property name="doubleProperty" value="1000.0"/>
+        <list name="referenceCollection">
+            <item refid="testComponent"/>
+            <item refid="testPrototypeComponent"/>
+        </list>
+        <list name="stringCollection">
+            <item value="one"/>
+            <item value="two"/>
+        </list>
+        <list name="booleanCollection">
+            <item value="true"/>
+            <item value="false"/>
+        </list>
+        <list name="intCollection">
+            <item value="1"/>
+            <item value="2"/>
+        </list>
+        <list name="longCollection">
+            <item value="10"/>
+            <item value="20"/>
+        </list>
+        <list name="floatCollection">
+            <item value="100.0"/>
+            <item value="200.0"/>
+        </list>
+        <list name="doubleCollection">
+            <item value="1000.0"/>
+            <item value="2000.0"/>
+        </list>
+        <map name="referenceMap">
+            <entry key="one" refid="testComponent"/>
+            <entry key="two" refid="testPrototypeComponent"/>
+        </map>
+        <map name="stringMap">
+            <entry key="one" value="one"/>
+            <entry key="two" value="two"/>
+        </map>
+        <map name="booleanMap">
+            <entry key="true" value="false"/>
+            <entry key="false" value="true"/>
+        </map>
+        <map name="intMap">
+            <entry key="1" value="3"/>
+            <entry key="2" value="4"/>
+        </map>
+        <map name="longMap">
+            <entry key="10" value="30"/>
+            <entry key="20" value="40"/>
+        </map>
+        <map name="floatMap">
+            <entry key="100.0" value="300.0"/>
+            <entry key="200.0" value="400.0"/>
+        </map>
+        <map name="doubleMap">
+            <entry key="1000.0" value="3000.0"/>
+            <entry key="2000.0" value="4000.0"/>
+        </map>
+    </component>
+
+</components>

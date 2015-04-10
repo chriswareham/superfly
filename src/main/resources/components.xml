@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<!DOCTYPE components PUBLIC "-//Superfly//DTD Components 1.0//EN" "http://www.chriswareham.net/DTD/components.dtd">
+<components>
+
+    <component id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
+        <property name="serverName" value="@DATABASE_SERVER@"/>
+        <property name="portNumber" value="@DATABASE_PORT@"/>
+        <property name="databaseName" value="@DATABASE_NAME@"/>
+        <property name="user" value="testuser"/>
+        <property name="password" value="t3stp4ssw0rd"/>
+    </component>
+
+    <component id="dataSourceWrapper" class="net.chriswareham.da.DataSourceImpl">
+        <property name="dataSource" refid="dataSource"/>
+        <property name="minIdle" value="0"/>
+        <property name="maxIdle" value="25"/>
+        <property name="maxActive" value="-1"/>
+        <property name="maxWait" value="-1"/>
+    </component>
+
+    <component id="queryService" class="net.chriswareham.da.QueryServiceImpl">
+        <property name="dataSource" refid="dataSourceWrapper"/>
+    </component>
+
+    <component id="serialiser" class="net.chriswareham.da.SerialiserServiceImpl">
+        <property name="key" value="XXX"/>
+    </component>
+
+</components>

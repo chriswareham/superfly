@@ -1,0 +1,72 @@
+<!--
+   Superfly Components version 1.0 DTD
+
+   Copyright (c) 2015 Chris Wareham,
+   All Rights Reserved.
+
+   This DTD is identified by the PUBLIC and SYSTEM identifiers:
+
+   PUBLIC "-//Superfly//DTD Components 1.0//EN"
+   SYSTEM "http://www.chriswareham.net/DTD/components.dtd"
+-->
+
+<!-- ========================== Entities =========================== -->
+
+<!ENTITY % Instantiation "(immediate | demand)">
+
+<!-- ========================== Elements =========================== -->
+
+<!ELEMENT components (include*, component*)>
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include
+  path CDATA #REQUIRED
+  >
+
+<!ELEMENT component (constructorarg*, (property | list | map)*)>
+<!ATTLIST component
+  id            CDATA           #REQUIRED
+  class         CDATA           #REQUIRED
+  instantiation %Instantiation; "immediate"
+  startup       CDATA           #IMPLIED
+  shutdown      CDATA           #IMPLIED
+  >
+
+<!ELEMENT constructorarg EMPTY>
+<!ATTLIST constructorarg
+  class CDATA #REQUIRED
+  refid CDATA #IMPLIED
+  value CDATA #IMPLIED
+  >
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+  name  CDATA #REQUIRED
+  refid CDATA #IMPLIED
+  value CDATA #IMPLIED
+  >
+
+<!ELEMENT list (item*)>
+<!ATTLIST list
+  name  CDATA #REQUIRED
+  >
+
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+  refid CDATA #IMPLIED
+  value CDATA #IMPLIED
+  >
+
+<!ELEMENT map (entry*)>
+<!ATTLIST map
+  name  CDATA #REQUIRED
+  >
+
+<!ELEMENT entry EMPTY>
+<!ATTLIST entry
+  key   CDATA #REQUIRED
+  refid CDATA #IMPLIED
+  value CDATA #IMPLIED
+  >
+
+<!-- =============================================================== -->

@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Application Architecture</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+<link rel="stylesheet" type="text/css" href="screen.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="print.css" media="print"/>
+</head>
+<body>
+<div id="body">
+<h1>Application Architecture</h1>
+<div id="tabs">
+<ul>
+<li><a href="index.html">Home</a></li>
+</ul>
+</div>
+<div id="main">
+<h2>Source Code</h2>
+<p>The classes in a typical enterprise application are structured into three
+architectural tiers - data access, business logic and presentation. Examples of
+data access classes include those that communicate with a persistent store such
+as a relational database. Examples of business logic classes include those that
+perform a card payment. In this framework, web applications implement <em>Action</em>
+classes that act as controllers, marshaling parameters and forwarding them to
+business logic and/or data access classes. The business logic and data access
+classes return classes that are used as data models for presentation via <em>View</em>
+classes. The data access and business logic classes are not bound to a specific
+presentation technology such as JSP, Velocity or XSLT, allowing for simpler
+testing and reuse. An example of a different presentation technology is Swing.</p>
+<p><img src="code_base.png" width="800" height="636" alt="[code_base]"/></p>
+<h3>Framework</h3>
+<p>The bulk of the code base in a typical application is composed of data access
+and business logic classes that are combined into an application by a
+lightweight dependency injection framework. This framework is found in the
+<code>net.chriswareham.di</code> package, and is based around the
+<code>net.chriswareham.di.ComponentFactory</code> interface. This
+interface is implemented by the
+<code>net.chriswareham.di.DefaultComponentFactory</code> class, which
+processes a simple XML configuration file. The configuration file, which should
+conform to the <a href="components.dtd">Components DTD</a>, contains
+declarations for each data access and business logic class that makes up an
+application, as shown in the following example:</p>
+<pre class="boxed">
+<strong>&lt;components&gt;
+
+    &lt;component id="</strong>dataSource<strong>" class="</strong>org.postgresql.ds.PGSimpleDataSource<strong>"&gt;
+        &lt;property name="</strong>serverName<strong>" value="</strong>@DATABASE_SERVER@<strong>"/&gt;
+        &lt;property name="</strong>portNumber<strong>" value="</strong>@DATABASE_PORT@<strong>"/&gt;
+        &lt;property name="</strong>databaseName<strong>" value="</strong>@DATABASE_NAME@<strong>"/&gt;
+        &lt;property name="</strong>user<strong>" value="</strong>@DATABASE_USER@<strong>"/&gt;
+        &lt;property name="</strong>password<strong>" value="</strong>@DATABASE_PASSWORD@<strong>"/&gt;
+    &lt;/component&gt;
+
+    &lt;component id="</strong>dataSourceWrapper<strong>" class="</strong>net.chriswareham.da.DataSourceImpl<strong>"&gt;
+        &lt;property name="</strong>dataSource<strong>" refid="</strong>dataSource<strong>"/&gt;
+        &lt;property name="</strong>minIdle<strong>" value="</strong>0<strong>"/&gt;
+        &lt;property name="</strong>maxIdle<strong>" value="</strong>25<strong>"/&gt;
+        &lt;property name="</strong>maxActive<strong>" value="</strong>-1<strong>"/&gt;
+        &lt;property name="</strong>maxWait<strong>" value="</strong>-1<strong>"/&gt;
+    &lt;/component&gt;
+
+    &lt;component id="</strong>queryService<strong>" class="</strong>net.chriswareham.da.QueryServiceImpl<strong>"&gt;
+        &lt;property name="</strong>dataSource<strong>" refid="</strong>dataSourceWrapper<strong>"/&gt;
+    &lt;/component&gt;
+
+    &lt;component id="</strong>venueDao<strong>" class="</strong>com.test.app.VenueDaoImpl<strong>"&gt;
+        &lt;property name="</strong>queryService<strong>" refid="</strong>queryService<strong>"/&gt;
+        &lt;property name="</strong>cacheEnabled<strong>" value="</strong>@CACHE_ENABLED@<strong>"/&gt;
+        &lt;property name="</strong>purgeTime<strong>" value="</strong>60<strong>"/&gt;
+        &lt;property name="</strong>purgeFrequency<strong>" value="</strong>5<strong>"/&gt;
+    &lt;/component&gt;
+
+&lt;/components&gt;</strong>
+</pre>
+<p>A component has an id, which must be unique within the configuration, and can
+have properties that are either a value (a Java primitive type) or a reference
+to the id of a previously declared component. Properties must be exposed by the
+implementing class as JavaBean setters, which must not be overloaded. As well as
+single values, lists and maps of values or references can be declared as
+follows:</p>
+<pre class="boxed">
+<strong>&lt;component id="</strong>venueCreator<strong>" class="</strong>com.test.app.VenueCreatorImpl<strong>"&gt;
+    &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"&gt;
+    &lt;property name="</strong>maxDescriptionLength<strong>" value="</strong>2000<strong>"&gt;
+    &lt;list name="</strong>permittedCategories<strong>"&gt;
+        &lt;item value="</strong>guesthouse<strong>"/&gt;
+        &lt;item value="</strong>hostel<strong>"/&gt;
+        &lt;item value="</strong>hotel<strong>"/&gt;
+    &lt;/list&gt;
+    &lt;map name="</strong>priceBands<strong>"&gt;
+        &lt;entry key="</strong>0<strong>" value="</strong>budget<strong>"/&gt;
+        &lt;entry key="</strong>100<strong>" value="</strong>economy<strong>"/&gt;
+        &lt;entry key="</strong>200<strong>" value="</strong>premium<strong>"/&gt;
+    &lt;/map&gt;
+&lt;/component&gt;</strong>
+</pre>
+<p>To initialise a component factory, an instance of a class implementing the
+<code>net.chriswareham.di.ResourceResolver</code> interface must be
+passed to the <code>setResourceResolver()</code> method, and the name of the
+configuration file passed to the <code>setComponentResource()</code> method. The
+default component factory also implements the <code>net.chriswareham.di.LifecycleComponent</code>
+interface, which defines <code>start()</code> and <code>stop()</code> method
+signatures. When the default component factory's <code>start()</code> method is
+called, the resource resolver is used to return an input stream for reading the
+configuration file. The configuration file is parsed, and the components that
+make up the application are initialised with parameters and references to other
+components (dependency injection). Once all components are initialised, those
+that implement the <code>LifecycleComponent</code> interface have their <code>start()</code>
+methods called. On shutdown of the application, the <code>stop()</code> method
+of the default component factory is called, which in turn calls the <code>stop()</code>
+methods of the components that implement the <code>LifecycleComponent</code>
+interface. As well as implementing dependency injection, a component factory can
+act as a registry for looking up components programmatically with the following
+method:</p>
+<pre class="boxed">
+    /**
+     * Get a component of a specific type.
+     *
+     * @<strong>param</strong> &lt;T&gt; the type of the component
+     * @<strong>param</strong> name the name of the component
+     * @<strong>param</strong> type the type of the component
+     * @<strong>return</strong> the component
+     * @<strong>throws</strong> ComponentException if the component of the specific type does not exist
+     */
+    &lt;T&gt; T getComponent(String name, Class&lt;T&gt; type) <strong>throws</strong> ComponentException;
+</pre>
+<p>Components can optionally be declared with an <code>instantiation</code>
+attribute, which can take the values <code>immediate</code> or <code>demand</code>.
+The default is <code>demand</code>, which means the component will be
+instantiated at startup, whereas components declared <code>demand</code> will
+not be instantiated until they are either referenced by another component or are
+programmatically looked up. This allows components to be declared without
+consuming memory or other resources if they are not necessarily used during the
+lifetime of an application. For example, a standalone application could be
+declared in a configuration file, and that file used by both a web application
+and the standalone application:</p>
+<pre class="boxed">
+<strong>&lt;component id="</strong>venueLoader<strong>" class="</strong>com.test.app.VenueLoaderImpl<strong>" instantiation="</strong>demand<strong>"&gt;
+    &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"&gt;
+&lt;/component&gt;</strong>
+</pre>
+<p>There are also classes that implement pooling for database connections and
+caching of objects both in memory and on disk. Database connections are accessed
+via the <code>javax.sql.DataSource</code> interface, which has the following
+method:</p>
+<pre class="boxed">
+    /**
+     * Get a connection from the data source.
+     *
+     * <strong>@return</strong> a connection from the data source
+     * <strong>@throws</strong> SQLException if an error occurs
+     */
+    Connection getConnection() <strong>throws</strong> SQLException;
+</pre>
+<p>A pooling implementation is provided by the <code>net.chriswareham.da.DataSourceImpl</code>
+class, which uses the Apache Commons Pool and DBCP libraries.</p>
+<p>Cache classes implement the <code>net.chriswareham.da.Cache</code> interface, which has the following methods:</p>
+<pre class="boxed">
+    /**
+     * Fetches an object.
+     *
+     * <strong>@param</strong> id the id of the object to fetch
+     * <strong>@return</strong> the object, or null if it is not cached
+     */
+    T fetch(I id);
+
+    /**
+     * Stores an object.
+     *
+     * <strong>@param</strong> id the id of the object to store
+     * <strong>@param</strong> obj the object to store
+     */
+    <strong>void</strong> store(I id, T obj);
+
+    /**
+     * Flushes and stores an object.
+     *
+     * <strong>@param</strong> id the id of the object to flush and store
+     * <strong>@param</strong> obj the object to flush and store
+     */
+    <strong>void</strong> flushAndStore(I id, T obj);
+
+    /**
+     * Flushes an object.
+     *
+     * <strong>@param</strong> id the id of the object to flush
+     */
+    <strong>void</strong> flush(I id);
+
+    /**
+     * Flushes all objects from the cache.
+     */
+    <strong>void</strong> flush();
+</pre>
+<p>A framework for implementing the MVC (Model View Controller) pattern in web
+applications can also be found in the <code>net.chriswareham.mvc</code>
+package. It is similar to other MVC frameworks such as the ones found in Spring
+and Struts. An implementation of the <em>Front Controller</em> pattern is
+provided by the <code>net.chriswareham.mvc.ControllerFilter</code> class.
+When a web application is initialised, the front controller reads the
+definitions of <em>interceptors</em>, <em>actions</em> (controllers in the MVC
+pattern) and <em>views</em>. These interceptors, actions and views are defined
+in a configuration file that uses the same XML format as the dependency
+injection framework:</p>
+<pre class="boxed">
+<strong>&lt;component id="</strong>authenticatingInterceptor<strong>" class="</strong>com.test.app.AuthenticatingActionInterceptor<strong>"&gt;
+    &lt;property name="</strong>userDao<strong>" refid="</strong>userDao<strong>"/&gt;
+    &lt;property name="</strong>cookieName<strong>" value="</strong>User<strong>"/&gt;
+    &lt;property name="</strong>cookieDomain<strong>" value="</strong>.example.com<strong>"/&gt;
+    &lt;property name="</strong>cookiePath<strong>" value="</strong>/<strong>"/&gt;
+    &lt;property name="</strong>cookieMaxAge<strong>" value="</strong>315360000<strong>"/&gt;
+&lt;/component&gt;</strong>
+</pre>
+<pre class="boxed">
+<strong>&lt;component id="</strong>venueAction<strong>" class="</strong>com.test.app.VenueFinderAction<strong>"&gt;
+    &lt;property name="</strong>path<strong>" value="/venues"/&gt;
+    &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"/&gt;
+    &lt;property name="</strong>viewName<strong>" value="</strong>venueView<strong>"/&gt;
+&lt;/component&gt;</strong>
+</pre>
+<pre class="boxed">
+<strong>&lt;component id="</strong>venueView<strong>" class="</strong>net.chriswareham.mvc.JspView<strong>"&gt;
+    &lt;property name="</strong>path<strong>" value="</strong>/venue.jsp<strong>"/&gt;
+&lt;/component&gt;</strong>
+</pre>
+<p>The configuration file format also supports an include mechanism, which can
+be used to pull in definitions of the business logic and data access components
+used across all applications:</p>
+<pre class="boxed">
+<strong>&lt;include path="</strong>/WEB-INF/classes/components.xml<strong>"/&gt;</strong>
+</pre>
+<p>Controllers implement the <code>net.chriswareham.mvc.Action</code> interface, which defines the following method:</p>
+<pre class="boxed">
+    /**
+     * Handle a request.
+     *
+     * <strong>@param</strong> request holds data for the request
+     * <strong>@return</strong> the view name and models for the response
+     * <strong>@throws</strong> ActionException if an error occurs
+     */
+    ActionResponse action(ActionRequest request) <strong>throws</strong> ActionException;
+</pre>
+<p>The <code>ActionRequest</code> passed as the sole argument to the
+<code>action()</code> method is an interface for a transfer object that contains
+data such as HTTP post parameters and extended path information, in a convenient
+format. For instance, integer parameters submitted via a form can be accessed
+through the following typed methods in the <code>ActionRequest</code>
+interface:</p>
+<pre class="boxed">
+    /**
+     * Gets an integer value from a parameter. Returns 0 if a parameter of the
+     * requested name does not exist, or if an integer cannot be parsed from the
+     * parameter string.
+     *
+     * <strong>@param</strong> name the name of the parameter
+     * <strong>@return</strong> the integer value of the parameter
+     */
+    <strong>int</strong> getIntegerParameter(String name);
+
+    /**
+     * Gets an integer value from a parameter. Returns the specified default
+     * value if a parameter of the requested name does not exist, or if an
+     * integer cannot be parsed from the parameter string.
+     *
+     * <strong>@param</strong> name the name of the parameter
+     * <strong>@param</strong> def the default value
+     * <strong>@return</strong> the integer value of the parameter
+     */
+    <strong>int</strong> getIntegerParameter(String name, <strong>int</strong> def);
+</pre>
+<p>The framework provides a default implementation of the
+<code>ActionRequest</code> interface in the form of the
+<code>DefaultActionRequest</code> class.</p>
+<p>The <code>ActionResponse</code> returned by the <code>action()</code> method
+is a transfer object for cookies, data models and a named view that will render
+the data models. Views implement the <code>net.chriswareham.mvc.View</code>
+interface, which defines the following method:</p>
+<pre class="boxed">
+    /**
+     * Render models.
+     *
+     * <strong>@param</strong> models the models
+     * <strong>@param</strong> request the client request
+     * <strong>@param</strong> response the servlet response
+     * <strong>@param</strong> context the servlet context
+     * <strong>@throws</strong> IOException if an input or output error occurs
+     * <strong>@throws</strong> ServletException if a servlet error occurs
+     */
+    <strong>void</strong> render(Map&lt;String, Object&gt; models,
+                ServletRequest request,
+                ServletResponse response,
+                ServletContext context)
+                <strong>throws</strong> IOException, ServletException;
+</pre>
+<p>The framework provides an implementation of the <code>View</code> interface
+that supports rendering models via a JSP, as well as additional implementations
+that can return a byte stream with a MIME type header, the models serialised as
+JSON or perform a redirect.</p>
+<h3>Data Access And Business Logic Tiers</h3>
+<p>The data access and business logic tiers define an API (Application
+Programming Interface) which are a set of Java methods defined in interfaces.
+These interfaces define a <em>contract</em> between the API user and concrete
+implementations of the interfaces. As an example, the following interface
+provides an API for dealing with users:</p>
+<pre class="boxed">
+<strong>import</strong> java.util.List;
+
+<strong>public interface</strong> UserDao {
+    List&lt;User&gt; search(UserSearchCriteria criteria) <strong>throws</strong> UserDaoException;
+
+    User read(<strong>int</strong> userId) <strong>throws</strong> UserDaoException;
+
+    User read(<strong>int</strong> userId, String passwordHash) <strong>throws</strong> UserDaoException;
+
+    <strong>void</strong> create(User user) <strong>throws</strong> UserDaoException;
+
+    <strong>void</strong> update(User user) <strong>throws</strong> UserDaoException;
+
+    <strong>void</strong> delete(<strong>int</strong> userId) <strong>throws</strong> UserDaoException;
+}
+</pre>
+<p>This is a typical example of the CRUD (Create, Read, Update, Delete) pattern
+often used to access a persistent store such as a database, or remote resources
+such as web services. As can be seen in the example, this pattern is often
+augmented with a <em>search</em> method, which takes a <em>transfer object</em>
+as an argument. The transfer object is also defined in terms of an interface to
+a JavaBean, which aggregates search parameters in order to simplify the
+signatures of methods that would otherwise need many arguments. Modifications to
+the information stored in a transfer object can also be made without needing to
+alter the signatures of methods that take such objects as arguments. The user
+information is also aggregated into a JavaBean, which opens up the possibility
+of using sophisticated Java features such as reflection and serialisation. As an
+example, the following class defines a user bean:</p>
+<pre class="boxed">
+<strong>import</strong> java.io.Serializable;
+
+<strong>public class</strong> User <strong>implements</strong> Serializable {
+    <strong>private int</strong> userId;
+    <strong>private</strong> String userName;
+    <strong>private</strong> String emailAddress;
+
+    <strong>public int</strong> getUserId() {
+        <strong>return</strong> userId;
+    }
+
+    <strong>public void</strong> setUserId(<strong>final int</strong> ui) {
+        userId = ui;
+    }
+
+    <strong>public</strong> String getUserName() {
+        <strong>return</strong> userName;
+    }
+
+    <strong>public void</strong> setUserName(<strong>final</strong> String un) {
+        userName = un;
+    }
+
+    <strong>public</strong> String getEmailAddress() {
+        <strong>return</strong> emailAddress;
+    }
+
+    <strong>public void</strong> setEmailAddress(<strong>final</strong> String ea) {
+        emailAddress = ea;
+    }
+}
+</pre>
+<p>A robust bean implementation should override the <code>toString()</code>,
+<code>equals()</code> and <code>hashCode()</code> methods inherited from the
+<code>Object</code> class, and may implement the <code>compareTo()</code> method
+from the <code>Comparable</code> interface. For example:</p>
+<pre class="boxed">
+    <strong>public int</strong> compareTo(<strong>final</strong> User user) {
+        <strong>return</strong> userName == <strong>null</strong> ? user.userName == <strong>null</strong> ? 0 : 1 : userName.compareTo(user.userName);
+    }
+
+    <em>@Override</em>
+    <strong>public</strong> String toString() {
+        <strong>return</strong> userName;
+    }
+
+    <em>@Override</em>
+    <strong>public boolean</strong> equals(<strong>final</strong> Object obj) {
+        <strong>if</strong> (obj == <strong>this</strong>) {
+            <strong>return true</strong>;
+        }
+        <strong>if</strong> (!(obj <strong>instanceof</strong> User)) {
+            <strong>return false</strong>;
+        }
+        User user = (User) obj;
+        <strong>return</strong> userId == user.userId;
+    }
+
+    <em>@Override</em>
+    <strong>public int</strong> hashCode() {
+        <strong>return</strong> userId;
+    }
+</pre>
+<h3>Web Presentation Tier</h3>
+<p>A web presentation tier uses the actions and views framework, with actual
+templates written as <em>Java Server Pages</em>. The JSP technology provides a
+simple templating language that allows the mixing of XHTML markup with
+additional XML elements that provide processing instructions for data models
+created by the data access and business logic tiers. Support for scriptlets
+(actual Java code embedded in a JSP) should be disabled, as they are deprecated
+in favour of the Java Standard Tag Library, augmented where necessary by a small
+library of custom tags in the <code>net.chriswareham.mvc.tags</code> package.
+The JSTL tags are the additional XML elements added to the XHTML in a JSP to
+provide control structures for looping or branching as well as utility methods
+for localisation and escaping of user supplied text. The custom tags provide
+additional functionality specific to web applications. The JSP templates compile
+down to simple Java code which is in turn compiled down to byte code and
+executed inside a <em>web application container</em>. For live deployment, the
+JSP templates are precompiled down to byte code, allowing for a faster startup of
+the container, as it needs to do no compilation of the templates itself. For
+development, the JSP templates are compiled on the fly by the container,
+allowing for a faster development cycle.</p>
+<p>In addition to a web presentation tier that generates XHTML for display in a
+browser, actions can be written to return XML in formats such as SOAP or RSS.
+This can provide web services that allow third parties to integrate a subset of
+functionality into their own applications by using the
+<code>net.chriswareham.mvc.ByteArrayView</code> or
+<code>net.chriswareham.mvc.JsonView</code> classes.</p>
+<h3>GUI Presentation Tier</h3>
+<p>A GUI (Graphical User Interface) presentation tier can utilise classes in the
+<code>net.chriswareham.gui</code> package. In addition to data entry widgets,
+these classes add extra type safety via generics and encourage proper use of an
+MVC abstraction.</p>
+<h3>Future Enhancements</h3>
+<p>There are currently stubs in the framework's cache classes for cache
+invalidation via an events system. This has been implemented in the past using a
+CORBA (Common Object Request Broker Architecture) Event service. However, in a
+completely Java based system, a JMS (Java Message Service) implementation is a
+more obvious choice. As well as allowing for invalidation of objects in the
+caches, a generic events system can form the basis of a push based syndication
+service.</p>
+<h2>Bibliography</h2>
+<p><em>Core J2EE Patterns</em> Alur, Malks, Crupi (Prentice Hall, 2003 ISBN 0131422464).</p>
+<p><em>J2EE Design And Development</em> Johnson (Wrox, 2003 ISBN 0-7645-4385-7).</p>
+<p><em>J2EE Development Without EJB</em> Johnson, Hoeller (Wrox, 2004 ISBN 0-7645-5831-5).</p>
+<p><em>Patterns Of Enterprise Application Architecture</em> Fowler et. al. (Addison Wesley, 2003 ISBN 0-321-12742-0).</p>
+</div>
+<div id="footer">
+<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Strict" height="31" width="88"/></a></p>
+</div>
+</div>
+</body>
+</html>

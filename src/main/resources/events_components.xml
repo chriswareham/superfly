@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<!DOCTYPE components PUBLIC "-//Superfly//DTD Components 1.0//EN" "http://www.chriswareham.net/DTD/components.dtd">
+<components>
+
+    <component id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+    </component>
+
+    <component id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" shutdown="stop">
+        <property name="connectionFactory" refid="connectionFactory"/>
+    </component>
+
+    <component id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructorarg class="java.lang.String" value="test"/>
+    </component>
+
+    <component id="events" class="net.chriswareham.events.EventsJmsImpl">
+        <property name="connectionFactory" refid="pooledConnectionFactory"/>
+        <map name="topic">
+            <entry key="test" refid="destination"/>
+        </map>
+    </component>
+
+</components>

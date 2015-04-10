@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Development Process</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+<link rel="stylesheet" type="text/css" href="screen.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="print.css" media="print"/>
+</head>
+<body>
+<div id="body">
+<h1>Development Process</h1>
+<div id="tabs">
+<ul>
+<li><a href="index.html">Home</a></li>
+</ul>
+</div>
+<div id="main">
+<h2>Introduction</h2>
+<p>This document describes the tools and processes required to build and develop
+the Superfly framework.</p>
+<h2>Required Software</h2>
+<p>The following software is required to build and develop the Superfly
+framework:</p>
+<table cellspacing="0" cellpadding="5" border="1">
+<tr>
+ <th>Name</th>
+ <th>Version</th>
+ <th>Source</th>
+ <th>Description</th>
+</tr>
+<tr>
+ <td>Java SE</td>
+ <td>7.0</td>
+ <td><a href="http://www.oracle.com/technetwork/java/">http://www.oracle.com/technetwork/java/</a></td>
+ <td>Java development kit</td>
+</tr>
+<tr>
+ <td>Tomcat <sup><a href="#note1">[1]</a></sup></td>
+ <td>6.0</td>
+ <td><a href="http://tomcat.apache.org/">http://tomcat.apache.org/</a></td>
+ <td>Web container supporting Servlet Spec 2.5 and JSP Spec 2.1</td>
+</tr>
+<tr>
+ <td>Ant</td>
+ <td>1.9</td>
+ <td><a href="http://ant.apache.org/">http://ant.apache.org/</a></td>
+ <td>Java build tool</td>
+</tr>
+<tr>
+ <td>Ant Contrib <sup><a href="#note2">[2]</a></sup></td>
+ <td>1.0</td>
+ <td><a href="http://ant-contrib.sourceforge.net/">http://ant-contrib.sourceforge.net/</a></td>
+ <td>Ant iterative tasks</td>
+</tr>
+<tr>
+ <td>JSch <sup><a href="#note3">[3]</a></sup></td>
+ <td>0.1</td>
+ <td><a href="http://www.jcraft.com/jsch/">http://www.jcraft.com/jsch/</a></td>
+ <td>Ant SCP and SSH tasks</td>
+</tr>
+</table>
+<p><a id="note1">[1]</a> To deploy web applications, Tomcat needs to be
+configured with a suitable <code>server.xml</code> file.</p>
+<p><a id="note2">[2]</a> To install, unarchive the Ant Contrib distribution file
+and copy the <code>ant-contrib-<em>version</em>.jar</code> file to the
+<code>.ant/lib/</code> directory in your home directory.</p>
+<p><a id="note3">[3]</a> To install, copy the JSch distribution file
+<code>jsch-<em>version</em>.jar</code> file to the <code>.ant/lib/</code>
+directory in your home directory.</p>
+<p>The following software may also prove useful:</p>
+<table cellspacing="0" cellpadding="5" border="1">
+<tr>
+ <th>Name</th>
+ <th>Version</th>
+ <th>Source</th>
+ <th>Description</th>
+</tr>
+<tr>
+ <td>NetBeans</td>
+ <td>8</td>
+ <td><a href="http://www.netbeans.org/">http://www.netbeans.org/</a></td>
+ <td>IDE</td>
+</tr>
+</table>
+<h2>Source Code</h2>
+<p>The source code can be retrieved from the Subversion repository with the
+command <code>svn checkout http://www.chriswareham.net/svn/repos/trunk/superfly</code>.
+This will produce a directory called <code>superfly</code> in the current
+working directory that contains the Ant build script, <code>build.xml</code>.
+Running the command <code>ant help</code> in the <code>superfly</code> directory
+will produce a list of the most important build targets, as well as a list of
+some of the build properties that may be overridden from the command line. In
+additional to the most important build targets, others include <code>checkstyle</code>
+for checking conformance with the coding conventions, <code>whitespace</code>
+for ensuring Java source files follow Unix line ending conventions, and <code>docs</code>
+for producing an archive of JavaDoc files.</p>
+<p>The coding convention used is based on <a href="http://java.sun.com/docs/codeconv/">Sun's
+Code Convention</a>. It differs in the use of four spaces for each level of
+indentation, and lines longer than eighty characters in length not needing to be
+wrapped. Before committing changes to the source repository, conformance with
+the coding conventions should be checked by running the command <code>ant
+checkstyle</code>. This runs the <a href="http://checkstyle.sourceforge.net/">Checkstyle</a>
+tool, which produces a log file called <code>checkstyle_errors.log</code>. All
+fields and methods, regardless of scope, must have JavaDoc comments describing
+their purpose. Parameters to methods should be declared <code>final</code>
+wherever possible, as this eliminates a potential source of confusion when
+non-final parameters are reassigned within a method.</p>
+<p>String concatenation should generally be avoided by using buffers, especially
+in loops, although common sense should be used to ensure that over zealous
+adherence to this convention does not clutter the code. Note that the
+<code>StringBuilder</code> class should be used in preference to the
+<code>StringBuffer</code> one, unless the synchronised methods of the latter
+class are definitely required. Logging statements should generally use string
+concatenation and be wrapped in a <em>logger guard</em> to prevent needless
+creation of string objects when the code is run at lower logging levels.
+Although this causes there to be two method calls when logging is enabled at the
+specified level or higher, it avoids the needless creation of
+<code>String</code> objects. For example:</p>
+<pre class="boxed">
+    <strong>if</strong> (LOGGER.isInfoEnabled()) {
+        LOGGER.info("A logging statement using string concatenation: " <strong>+</strong> str);
+    }
+
+    LOGGER.info("A logging statement not using string concatenation, so a guard is unnecessary");
+</pre>
+<p>All code should be written with thread safety in mind - for instance, parsing
+and formatting classes from the <code>java.text</code> package are not
+guaranteed to be thread safe and should not be made instance members in code
+that can be called concurrently by multiple threads.</p>
+<p>Line endings in text files should use the Unix format of a single line feed
+character. If using a windows based IDE or text editor, it should be configured
+to create new files in this format, and to honour the format of existing files.
+For the Eclipse IDE the following changes should be made to the preferences:</p>
+<ol>
+<li>Open the <em>Workspace</em> preferences pane by choosing <em>General:
+Workspace</em> from the menus.</li>
+<li>Change the <em>Text Encoding</em> preference to "UTF-8".</li>
+<li>Change the <em>New Text File Line Delimiter</em> preference to "Other" and
+choose "Unix".</li>
+</ol>
+<p>To convert the line endings of an existing file in Eclipse, choose <em>File :
+Convert Line Delimiters to : Unix</em> from the menus. Running the command
+<code>ant whitespace</code> will also convert the line endings in Java source
+files.</p>
+<h2>Development</h2>
+<p>New functionality should be developed on a branch in the Subversion
+repository, with regular merging from the trunk to simplify an eventual merge
+back to the trunk. Bug fixes or other small scale improvements to existing
+functionality should be developed on the trunk, unless it involves work of an
+invasive or experimental nature - put simply, common sense should be used to
+decide how likely it is that a change will result in breakage, if such a
+likelihood is high then the work should be conducted on a branch. Every commit
+should be preceded by running the <code>ant checkstyle</code> command and fixing
+any coding convention conformance issues.</p>
+<p>A branch may be created using the following Subversion commands:</p>
+<pre>
+$ <strong>svn copy http://www.chriswareham.net/svn/repos/trunk/superfly \
+           http://www.chriswareham.net/svn/repos/branches/<em>branch_name</em> \
+           -m "<em>description</em>"</strong>
+</pre>
+<p>Where <em>branch_name</em> is a succinct name for the branch, and
+<em>description</em> briefly describes the purpose of the branch.</p>
+<p>Merging from the trunk to a branch is accomplished with the following
+Subversion commands, having first ensured that all branch changes are committed
+(the command <code>svn status</code> can be used to check):</p>
+<pre>
+$ <strong>svn merge ^/trunk/superfly</strong>
+</pre>
+<p>Merging a branch back into the trunk is accomplished in a clean, upto date
+copy of the trunk, with the following Subversion commands:</p>
+<pre>
+$ <strong>svn merge --reintegrate http://www.chriswareham.net/svn/repos/branches/<em>branch_name</em></strong>
+$ <strong>svn commit -m "Merge the <em>branch_name</em> branch"</strong>
+</pre>
+<p>Once it is redundant, a branch can be deleted with the following Subversion
+command:</p>
+<pre>
+$ <strong>svn delete http://www.chriswareham.net/svn/repos/branches/<em>branch_name</em> \
+             -m "Delete the <em>branch_name</em> branch"</strong>
+</pre>
+<p>Note that the branch is not actually deleted, but effectively hidden after
+running this command.</p>
+<h2>Code Structure</h2>
+<p>The classes in the code base are structured into three architectural tiers -
+data access, business logic and presentation. All data access and business logic
+classes define <em>behaviour</em> - they actually do something - whereas beans
+should be purely data classes that simply store information and do not define
+behaviour. All data access and business logic classes must not rely on running
+in a web application container such as Tomcat, and should be coded to interfaces
+and accompanied by <em>unit tests</em> that cover all their interface methods.
+The tool used for unit testing is <a href="http://www.junit.org/">JUnit</a>, the
+de-facto standard for Java. Whether unit tests are written before the
+implementation code, so called <em>Test Driven Development</em>, is up to the
+individual developer. However in the experience of the author, interfaces are
+usually written first, as tests are grouped around each interface method - it is
+the API defined in an interface that drives the initial declaration of test
+methods rather than the other way round.</p>
+<p>The code is written around a lightweight framework that is similar to
+<a href="http://projects.spring.io/spring-framework/">Spring</a> and
+<a href="http://picocontainer.codehaus.org/">PicoContainer</a>, and is described in
+detail in the <a href="application_architecture.html">application
+architecture</a> document. Briefly, the framework relies on an XML file that
+describes a number of <em>components</em>. Each component is concerned with data
+access or business logic relating to one particular part of the system. On
+startup, either as a standalone program or from within a web application
+container like Tomcat, the XML file is parsed and the each component
+initialised. Components use <em>dependency injection</em> via setters, with
+parameters and other components dynamically set by the framework. Components can
+also implement a <code>LifecycleComponent</code> interface, which allows them to
+be informed when the framework is starting and stopping. Web applications use a
+set of classes and interfaces that support the MVC (<em>Model View
+Controller</em>) abstraction. The framework provides database connection pooling
+without the need for a directory lookup service such as JNDI or support from a
+web application container. There are also classes providing memory and disk
+based caching of objects without any need for the cached objects to implement a
+specific interface or to extend a specific base class.</p>
+</div>
+<h2>Bibliography</h2>
+<p><em>Ant In Action</em> Loughran, Hatcher (Manning Publications, 2007 ISBN 193239480X).</p>
+<p><em>Core J2EE Patterns</em> Alur, Malks, Crupi (Prentice Hall, 2003 ISBN 0131422464).</p>
+<p><em>J2EE Design And Development</em> Johnson (Wrox, 2003 ISBN 0-7645-4385-7).</p>
+<p><em>J2EE Development Without EJB</em> Johnson, Hoeller (Wrox, 2004 ISBN 0-7645-5831-5).</p>
+<p><em>JUnit In Action</em> Massol (Manning Publications, 2003 ISBN 1930110995).</p>
+<p><em>Patterns Of Enterprise Application Architecture</em> Fowler et. al. (Addison Wesley, 2003 ISBN 0-321-12742-0).</p>
+<div id="footer">
+<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Strict" height="31" width="88"/></a></p>
+</div>
+</div>
+</body>
+</html>

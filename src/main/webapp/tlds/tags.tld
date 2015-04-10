@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+
+    <tlib-version>1.1</tlib-version>
+    <short-name>functions</short-name>
+    <uri>http://www.chriswareham.net/tags/tags</uri>
+
+    <tag>
+        <name>months</name>
+        <tag-class>net.chriswareham.mvc.tags.MonthsTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>varStatus</name>
+            <required>false</required>
+        </attribute>
+        <attribute>
+            <name>count</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>start</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>serialise</name>
+        <tag-class>net.chriswareham.mvc.tags.SerialiserTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>obj</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>

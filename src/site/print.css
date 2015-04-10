@@ -1,0 +1,74 @@
+/*
+ * @(#) print.css - print stylesheet
+ *
+ * Copyright (C) 2012, Chris Wareham, All Rights Reserved
+ */
+
+body {
+    background-color: #FEFEFE;
+    color: black;
+    font-family: "Times new roman", serif;
+    font-size: 9pt;
+    line-height: 1.5em;
+    margin: 4px;
+}
+
+h1 {
+    border-bottom: 1px solid black;
+    font-size: 1.5em;
+    margin: 0;
+    padding: 8px 0 4px 0;
+}
+
+h2 {
+    font-size: 1.3em;
+}
+
+h3 {
+    font-size: 1.1em;
+}
+
+p, li, th, td {
+    font-size: 1.0em;
+}
+
+p.note {
+    font-style: italic;
+}
+
+p.footer {
+    border-top: 1px solid black;
+    margin: 0;
+    padding: 4px 0 8px 0;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    font-weight: bold;
+}
+
+pre, code {
+    color: black;
+    font-family: monospace;
+    font-size: 1em;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+#tabs, #footer {
+    display: none
+}

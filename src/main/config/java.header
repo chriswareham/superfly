@@ -1,0 +1,9 @@
+^/\*$
+^ \* @\(#\) [A-Z][a-zA-Z0-9]*\.java$
+^ \*$
+^ \* Copyright \(C\) [0-9]+, Chris Wareham, All Rights Reserved$
+^ \*/$
+
+^package net\.chriswareham
+
+^import
