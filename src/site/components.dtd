@@ -14,6 +14,8 @@
 
 <!ENTITY % Instantiation "(immediate | demand)">
 
+<!ENTITY % Type          "(string | boolean | int | long | float | double)">
+
 <!-- ========================== Elements =========================== -->
 
 <!ELEMENT components (include*, component*)>
@@ -23,7 +25,7 @@
   path CDATA #REQUIRED
   >
 
-<!ELEMENT component (constructorarg*, (property | list | map)*)>
+<!ELEMENT component ((constructor-ref | constructor-value)*, (property | list | map)*)>
 <!ATTLIST component
   id            CDATA           #REQUIRED
   class         CDATA           #REQUIRED
@@ -32,11 +34,15 @@
   shutdown      CDATA           #IMPLIED
   >
 
-<!ELEMENT constructorarg EMPTY>
-<!ATTLIST constructorarg
-  class CDATA #REQUIRED
-  refid CDATA #IMPLIED
-  value CDATA #IMPLIED
+<!ELEMENT constructor-ref EMPTY>
+<!ATTLIST constructor-ref
+  refid CDATA #REQUIRED
+  >
+
+<!ELEMENT constructor-value EMPTY>
+<!ATTLIST constructor-value
+  type  %Type; "string"
+  value CDATA  #REQUIRED
   >
 
 <!ELEMENT property EMPTY>

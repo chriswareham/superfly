@@ -122,6 +122,29 @@ public class TestComponentImpl implements TestComponent, TestComponentMBean, Com
     private final Map<Double, Double> doubleMap = new HashMap<>();
 
     /**
+     * Default constructor.
+     */
+    public TestComponentImpl() {
+        // empty
+    }
+
+    /**
+     * Constructor for injection.
+     *
+     * @param tc a reference
+     * @param ds a deault string
+     * @param s a string
+     * @param b a boolean
+     * @param i an integer
+     * @param l a long
+     * @param f a float
+     * @param d a double
+     */
+    public TestComponentImpl(final TestComponent tc, final String ds, final String s, final boolean b, final int i, final long l, final float f, final double d) {
+        // empty
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

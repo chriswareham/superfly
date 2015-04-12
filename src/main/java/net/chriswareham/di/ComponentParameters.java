@@ -8,6 +8,7 @@ package net.chriswareham.di;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,10 @@ public class ComponentParameters implements Serializable {
      */
     private String shutdown;
     /**
+     * The component constructor arguments.
+     */
+    private final List<ConstructorArg> constructorArgs = new ArrayList<>();
+    /**
      * The component references.
      */
     private final Map<String, String> references = new LinkedHashMap<>();
@@ -63,11 +68,11 @@ public class ComponentParameters implements Serializable {
     /**
      * The component map references.
      */
-    private final Map<String, Map<String, List<String>>> mapReferences = new LinkedHashMap<>();
+    private final Map<String, Map<String, String>> mapReferences = new LinkedHashMap<>();
     /**
      * The component map properties.
      */
-    private final Map<String, Map<String, List<String>>> mapProperties = new LinkedHashMap<>();
+    private final Map<String, Map<String, String>> mapProperties = new LinkedHashMap<>();
 
     /**
      * Get the id of the component.
@@ -160,6 +165,24 @@ public class ComponentParameters implements Serializable {
     }
 
     /**
+     * Get the component constructor arguments.
+     *
+     * @return the constructor arguments
+     */
+    public List<ConstructorArg> getConstructorArgs() {
+        return Collections.unmodifiableList(constructorArgs);
+    }
+
+    /**
+     * Add a constructor argument.
+     *
+     * @param constructorArg the constructor argument to add
+     */
+    public void addConstructorArg(final ConstructorArg constructorArg) {
+        constructorArgs.add(constructorArg);
+    }
+
+    /**
      * Get whether the component contains a parameter.
      *
      * @param name the parameter name
@@ -185,7 +208,7 @@ public class ComponentParameters implements Serializable {
      * @return the component reference names
      */
     public Set<String> getReferenceNames() {
-        return references.keySet();
+        return Collections.unmodifiableSet(references.keySet());
     }
 
     /**
@@ -224,7 +247,7 @@ public class ComponentParameters implements Serializable {
      * @return the component property names
      */
     public Set<String> getPropertyNames() {
-        return properties.keySet();
+        return Collections.unmodifiableSet(properties.keySet());
     }
 
     /**
@@ -263,7 +286,7 @@ public class ComponentParameters implements Serializable {
      * @return the component list reference names
      */
     public Set<String> getListReferenceNames() {
-        return listReferences.keySet();
+        return Collections.unmodifiableSet(listReferences.keySet());
     }
 
     /**
@@ -273,7 +296,7 @@ public class ComponentParameters implements Serializable {
      * @return the component list reference
      */
     public List<String> getListReference(final String name) {
-        return listReferences.get(name);
+        return Collections.unmodifiableList(listReferences.get(name));
     }
 
     /**
@@ -305,7 +328,7 @@ public class ComponentParameters implements Serializable {
      * @return the component list property names
      */
     public Set<String> getListPropertyNames() {
-        return listProperties.keySet();
+        return Collections.unmodifiableSet(listProperties.keySet());
     }
 
     /**
@@ -315,7 +338,7 @@ public class ComponentParameters implements Serializable {
      * @return the component list property
      */
     public List<String> getListProperty(final String name) {
-        return listProperties.get(name);
+        return Collections.unmodifiableList(listProperties.get(name));
     }
 
     /**
@@ -347,7 +370,7 @@ public class ComponentParameters implements Serializable {
      * @return the component map reference names
      */
     public Set<String> getMapReferenceNames() {
-        return mapReferences.keySet();
+        return Collections.unmodifiableSet(mapReferences.keySet());
     }
 
     /**
@@ -356,8 +379,8 @@ public class ComponentParameters implements Serializable {
      * @param name the map reference name
      * @return the component map reference
      */
-    public Map<String, List<String>> getMapReference(final String name) {
-        return mapReferences.get(name);
+    public Map<String, String> getMapReference(final String name) {
+        return Collections.unmodifiableMap(mapReferences.get(name));
     }
 
     /**
@@ -369,13 +392,10 @@ public class ComponentParameters implements Serializable {
      */
     public void addMapReference(final String name, final String key, final String value) {
         if (!mapReferences.containsKey(name)) {
-            mapReferences.put(name, new LinkedHashMap<String, List<String>>());
+            mapReferences.put(name, new LinkedHashMap<String, String>());
         }
-        Map<String, List<String>> values = mapReferences.get(name);
-        if (!values.containsKey(key)) {
-            values.put(key, new ArrayList<String>());
-        }
-        values.get(key).add(value);
+        Map<String, String> values = mapReferences.get(name);
+        values.put(key, value);
     }
 
     /**
@@ -394,7 +414,7 @@ public class ComponentParameters implements Serializable {
      * @return the component map property names
      */
     public Set<String> getMapPropertyNames() {
-        return mapProperties.keySet();
+        return Collections.unmodifiableSet(mapProperties.keySet());
     }
 
     /**
@@ -403,8 +423,8 @@ public class ComponentParameters implements Serializable {
      * @param name the map property name
      * @return the component map property
      */
-    public Map<String, List<String>> getMapProperty(final String name) {
-        return mapProperties.get(name);
+    public Map<String, String> getMapProperty(final String name) {
+        return Collections.unmodifiableMap(mapProperties.get(name));
     }
 
     /**
@@ -416,12 +436,9 @@ public class ComponentParameters implements Serializable {
      */
     public void addMapProperty(final String name, final String key, final String value) {
         if (!mapProperties.containsKey(name)) {
-            mapProperties.put(name, new LinkedHashMap<String, List<String>>());
+            mapProperties.put(name, new LinkedHashMap<String, String>());
         }
-        Map<String, List<String>> values = mapProperties.get(name);
-        if (!values.containsKey(key)) {
-            values.put(key, new ArrayList<String>());
-        }
-        values.get(key).add(value);
+        Map<String, String> values = mapProperties.get(name);
+        values.put(key, value);
     }
 }

@@ -6,6 +6,7 @@
 
 package net.chriswareham.di;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -266,65 +267,115 @@ public class DefaultComponentFactory implements ComponentFactory, LifecycleCompo
             LOGGER.debug("createComponent(): creating component id:[" + parameters.getId() + "] class:[" + parameters.getType() + "]");
         }
 
-        Class<?> type = parameters.getType();
+        Object component = instantiateComponent(parameters);
 
-        Map<String, Method> setters = ComponentUtils.getSetters(type);
+        Map<String, Method> setters = ComponentUtils.getSetters(parameters.getType());
 
-        Map<String, Method> adders = ComponentUtils.getAdders(type);
+        for (String name : parameters.getPropertyNames()) {
+            Method setter = setters.get(name);
+            String value = parameters.getProperty(name);
+            ComponentUtils.setProperty(component, setter, name, value);
+        }
 
-        Map<String, Method> putters = ComponentUtils.getPutters(type);
+        for (String name : parameters.getReferenceNames()) {
+            Method setter = setters.get(name);
+            Object reference = getComponent(parameters.getReference(name));
+            ComponentUtils.setReference(component, setter, name, reference);
+        }
 
+        Map<String, Method> adders = ComponentUtils.getAdders(parameters.getType());
+
+        for (String name : parameters.getListPropertyNames()) {
+            Method adder = adders.get(name);
+            List<String> values = parameters.getListProperty(name);
+            ComponentUtils.addProperties(component, adder, name, values);
+        }
+
+        for (String name : parameters.getListReferenceNames()) {
+            Method adder = adders.get(name);
+            List<Object> references = new ArrayList<>();
+            for (String reference : parameters.getListReference(name)) {
+                references.add(getComponent(reference));
+            }
+            ComponentUtils.addReferences(component, adder, name, references);
+        }
+
+        Map<String, Method> putters = ComponentUtils.getPutters(parameters.getType());
+
+        for (String name : parameters.getMapPropertyNames()) {
+            Method putter = putters.get(name);
+            Map<String, String> values = parameters.getMapProperty(name);
+            ComponentUtils.putProperties(component, putter, name, values);
+        }
+
+        for (String name : parameters.getMapReferenceNames()) {
+            Method putter = putters.get(name);
+            Map<String, Object> references = new LinkedHashMap<>();
+            for (Map.Entry<String, String> reference : parameters.getMapReference(name).entrySet()) {
+                references.put(reference.getKey(), getComponent(reference.getValue()));
+            }
+            ComponentUtils.putReferences(component, putter, name, references);
+        }
+
+        return component;
+    }
+
+    /**
+     * Instantiate a component.
+     *
+     * @param parameters the component parameters
+     * @return the component
+     * @throws ComponentException if an error occurs
+     */
+    private Object instantiateComponent(final ComponentParameters parameters) throws ComponentException {
         Object component = null;
 
         try {
-            component = type.getConstructor().newInstance();
+            Class<?> type = parameters.getType();
+    
+            List<ConstructorArg> args = parameters.getConstructorArgs();
+            if (args.isEmpty()) {
+                component = type.getConstructor().newInstance();
+            } else {
+                Constructor<?>[] constructors = type.getConstructors();
+                for (Constructor<?> constructor : constructors) {
+                    if (matches(constructor, args)) {
+                        Object[] objs = new Object[args.size()];
+                        for (int i = 0; i < args.size(); ++i) {
+                            objs[i] = args.get(i).getArg(this);
+                        }
+                        component = constructor.newInstance(objs);
+                        break;
+                    }
+                }
+                if (component == null) {
+                    throw new IllegalArgumentException("No matching constructor");
+                }
+            }
         } catch (ReflectiveOperationException | IllegalArgumentException exception) {
             throw new ComponentException("Error creating component id '" + parameters.getId() + "', failed to construct '" + parameters.getType() + "' class", exception);
         }
 
-        for (String name : parameters.getReferenceNames()) {
-            String value = parameters.getReference(name);
-            Object referent = getComponent(value);
-            ComponentUtils.setReference(component, setters, name, referent);
-        }
-
-        for (String name : parameters.getPropertyNames()) {
-            String value = parameters.getProperty(name);
-            ComponentUtils.setProperty(component, setters, name, value);
-        }
-
-        for (String name : parameters.getListReferenceNames()) {
-            List<String> values = parameters.getListReference(name);
-            List<Object> referents = new ArrayList<>(values.size());
-            for (String value : values) {
-                referents.add(getComponent(value));
-            }
-            ComponentUtils.addReferences(component, adders, name, referents);
-        }
-
-        for (String name : parameters.getListPropertyNames()) {
-            List<String> values = parameters.getListProperty(name);
-            ComponentUtils.addProperties(component, adders, name, values);
-        }
-
-        for (String name : parameters.getMapReferenceNames()) {
-            Map<String, List<String>> values = parameters.getMapReference(name);
-            Map<String, List<Object>> referents = new LinkedHashMap<>(values.size());
-            for (String key : values.keySet()) {
-                List<Object> objects = new ArrayList<>();
-                for (String value : values.get(key)) {
-                    objects.add(getComponent(value));
-                }
-                referents.put(key, objects);
-            }
-            ComponentUtils.putReferences(component, putters, name, referents);
-        }
-
-        for (String name : parameters.getMapPropertyNames()) {
-            Map<String, List<String>> values = parameters.getMapProperty(name);
-            ComponentUtils.putProperties(component, putters, name, values);
-        }
-
         return component;
+    }
+
+    /**
+     * Get whether a constructor matches component arguments.
+     *
+     * @param constructor the constructor
+     * @param args the component arguments
+     * @return whether the constructor matches the component arguments
+     */
+    private boolean matches(Constructor<?> constructor, List<ConstructorArg> args) {
+        Class<?>[] types = constructor.getParameterTypes();
+        if (types.length != args.size()) {
+            return false;
+        }
+        for (int i = 0; i < args.size(); ++i) {
+            if (!types[i].isAssignableFrom(args.get(i).getType())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

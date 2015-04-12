@@ -11,6 +11,14 @@
     <component id="prototypeComponent" class="net.chriswareham.di.TestComponentImpl" instantiation="demand"/>
 
     <component id="component" class="net.chriswareham.di.TestComponentImpl" startup="startup" shutdown="shutdown">
+        <constructor-ref refid="testComponent"/>
+        <constructor-value value="string"/>
+        <constructor-value type="string" value="string"/>
+        <constructor-value type="boolean" value="true"/>
+        <constructor-value type="int" value="1"/>
+        <constructor-value type="long" value="10"/>
+        <constructor-value type="float" value="100.0"/>
+        <constructor-value type="double" value="1000.0"/>
         <property name="managedName" value="TestComponentImpl:key=value"/>
         <property name="reference" refid="testComponent"/>
         <property name="prototypeReference" refid="testPrototypeComponent"/>

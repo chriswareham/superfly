@@ -7,6 +7,8 @@
 package net.chriswareham.di;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
@@ -36,6 +38,25 @@ public class ComponentParametersHandler extends DefaultHandler {
      * The default instantiation.
      */
     private static final String DEFAULT_INSTANTIATION = "IMMEDIATE";
+    /**
+     * The default constructor value type.
+     */
+    private static final String DEFAULT_TYPE = "string";
+    /**
+     * The constructor value types.
+     */
+    private static final Map<String, Class<?>> TYPES;
+
+    static {
+        Map<String, Class<?>> types = new HashMap<>();
+        types.put("string", String.class);
+        types.put("boolean", boolean.class);
+        types.put("int", int.class);
+        types.put("long", long.class);
+        types.put("float", float.class);
+        types.put("double", double.class);
+        TYPES = Collections.unmodifiableMap(types);
+    }
 
     /**
      * The resource resolver.
@@ -138,6 +159,12 @@ public class ComponentParametersHandler extends DefaultHandler {
             break;
         case "component":
             handleComponent(attributes);
+            break;
+        case "constructor-ref":
+            handleConstructorReference(attributes);
+            break;
+        case "constructor-value":
+            handleConstructorValue(attributes);
             break;
         case "property":
             handleProperty(attributes);
@@ -248,6 +275,49 @@ public class ComponentParametersHandler extends DefaultHandler {
         parameters.setShutdown(shutdown);
 
         componentParameters.put(id, parameters);
+    }
+
+    /**
+     * Handle a constructor reference element.
+     *
+     * @param attributes the element attributes
+     * @throws SAXException if an error is found
+     */
+    private void handleConstructorReference(final Attributes attributes) throws SAXException {
+        String refid = attributes.getValue("refid");
+
+        if (refid == null) {
+            throw new SAXException(documentLocator.getSystemId() + ":" + documentLocator.getLineNumber() + ": the constructor reference must specify a 'refid' attribute");
+        }
+
+        if (!componentParameters.containsKey(refid)) {
+            throw new SAXException(documentLocator.getSystemId() + ":" + documentLocator.getLineNumber() + ": the '" + refid + "' component has not been defined");
+        }
+
+        parameters.addConstructorArg(new ConstructorReference(componentParameters.get(refid).getType(), refid));
+    }
+
+    /**
+     * Handle a constructor value element.
+     *
+     * @param attributes the element attributes
+     * @throws SAXException if an error is found
+     */
+    private void handleConstructorValue(final Attributes attributes) throws SAXException {
+        String type = attributes.getValue("type");
+        String value = attributes.getValue("value");
+
+        if (value == null) {
+            throw new SAXException(documentLocator.getSystemId() + ":" + documentLocator.getLineNumber() + ": the constructor value must specify a 'value' attribute");
+        }
+
+        if (type != null && !TYPES.containsKey(type)) {
+            throw new SAXException(documentLocator.getSystemId() + ":" + documentLocator.getLineNumber() + ": the constructor value type '" + type + "' is unsupported");
+        }
+
+        Class<?> c = type != null ? TYPES.get(type) : TYPES.get(DEFAULT_TYPE);
+
+        parameters.addConstructorArg(new ConstructorValue(c, ComponentUtils.valueOf(c, value)));
     }
 
     /**

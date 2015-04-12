@@ -22,7 +22,7 @@ public class DiskCacheTest {
     /**
      * The cache directory.
      */
-    private static final String CACHE_DIRECTORY = "tmp";
+    private static final String CACHE_DIRECTORY = "target/cache";
     /**
      * The purge time.
      */

@@ -11,7 +11,7 @@
     </component>
 
     <component id="destination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructorarg class="java.lang.String" value="test"/>
+        <constructor-value value="test"/>
     </component>
 
     <component id="events" class="net.chriswareham.events.EventsJmsImpl">
