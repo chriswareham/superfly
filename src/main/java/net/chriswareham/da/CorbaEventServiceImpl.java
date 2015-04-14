@@ -1,54 +1,55 @@
 /*
- * @(#) EventsCorbaImpl.java
+ * @(#) CorbaEventServiceImpl.java
  *
  * Copyright (C) 2015, Chris Wareham, All Rights Reserved
  */
 
 package net.chriswareham.da;
 
-//import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-//import java.util.Map;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-//import java.util.concurrent.locks.ReadWriteLock;
-//import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
-import org.omg.CORBA.ORBPackage.InvalidName;
-//import org.omg.CosEventChannelAdmin.ConsumerAdmin;
-//import org.omg.CosEventChannelAdmin.EventChannel;
-//import org.omg.CosEventChannelAdmin.EventChannelHelper;
-//import org.omg.CosEventChannelAdmin.ProxyPushConsumer;
-//import org.omg.CosEventChannelAdmin.ProxyPushSupplier;
-//import org.omg.CosEventChannelAdmin.SupplierAdmin;
-//import org.omg.CosEventComm.Disconnected;
-//import org.omg.CosEventComm.PushConsumer;
-//import org.omg.CosEventComm.PushConsumerHelper;
-//import org.omg.CosEventComm.PushConsumerPOA;
-//import org.omg.CosEventComm.PushSupplierPOA;
+import org.omg.CORBA.SystemException;
+import org.omg.CORBA.UserException;
+import org.omg.CosEventChannelAdmin.ConsumerAdmin;
+import org.omg.CosEventChannelAdmin.EventChannel;
+import org.omg.CosEventChannelAdmin.EventChannelHelper;
+import org.omg.CosEventChannelAdmin.ProxyPushConsumer;
+import org.omg.CosEventChannelAdmin.ProxyPushSupplier;
+import org.omg.CosEventChannelAdmin.SupplierAdmin;
+import org.omg.CosEventComm.Disconnected;
+import org.omg.CosEventComm.PushConsumer;
+import org.omg.CosEventComm.PushConsumerHelper;
+import org.omg.CosEventComm.PushConsumerPOA;
+import org.omg.CosEventComm.PushSupplierPOA;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
-import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import org.apache.log4j.Logger;
 
 import net.chriswareham.di.LifecycleComponent;
-import org.omg.CORBA.UserException;
 
 /**
  * This class provides a CORBA based events service.
  *
  * @author Chris Wareham
  */
-public class EventsCorbaImpl implements Events, LifecycleComponent {
+public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
     /**
      * The logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(EventsCorbaImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(CorbaEventServiceImpl.class);
 
     /**
      * The Object Request Broker.
@@ -58,20 +59,20 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
      * The topics.
      */
     private final Set<String> topics = new HashSet<>();
-/*
-    / **
+
+    /**
      * The publishers.
-     * /
-    private Map<String, ProxyPushConsumer> publishers = new HashMap<>();
-    / **
+     */
+    private final Map<String, ProxyPushConsumer> publishers = new HashMap<>();
+    /**
      * The subscribers.
-     * /
-    private Map<String, ProxyPushSupplier> subscribers = new HashMap<>();
-    / **
+     */
+    private final Map<String, ProxyPushSupplier> subscribers = new HashMap<>();
+    /**
      * The consumers.
-     * /
-    private Map<String, Consumer> consumers = new HashMap<>();
-*/
+     */
+    private final Map<String, Consumer> consumers = new HashMap<>();
+
     /**
      * Add a topic.
      *
@@ -86,8 +87,8 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
      */
     @Override
     public void addTopicListener(final String topic, final TopicListener listener) {
-//        Consumer consumer = consumers.get(topic);
-//        consumer.addListener(listener);
+        Consumer consumer = consumers.get(topic);
+        consumer.addListener(listener);
     }
 
     /**
@@ -95,8 +96,8 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
      */
     @Override
     public void removeTopicListener(final String topic, final TopicListener listener) {
-//        Consumer consumer = consumers.get(topic);
-//        consumer.removeListener(listener);
+        Consumer consumer = consumers.get(topic);
+        consumer.removeListener(listener);
     }
 
     /**
@@ -104,16 +105,15 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
      */
     @Override
     public void publishEvent(final String topic, final Object id, final EventType type) {
-//        try {
+        try {
             Any any = orb.create_any();
-            any.insert_string(id.toString());
-            any.insert_string(type.toString());
+            any.insert_string(id.toString() + "_" + type.toString());
 
-//            ProxyPushConsumer proxyPushConsumer = publishers.get(topic);
-//            proxyPushConsumer.push(any);
-//        } catch (Disconnected exception) {
-//            LOGGER.error("publishEvent(): publisher disconnected");
-//        }
+            ProxyPushConsumer proxyPushConsumer = publishers.get(topic);
+            proxyPushConsumer.push(any);
+        } catch (UserException exception) {
+            LOGGER.error("Publisher disconnected", exception);
+        }
     }
 
     /**
@@ -136,13 +136,13 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         try {
             org.omg.CORBA.Object obj = orb.resolve_initial_references("RootPOA");
             poa = POAHelper.narrow(obj);
-        } catch (InvalidName exception) {
+        } catch (UserException exception) {
             throw new IllegalStateException("Unable to resolve Root POA", exception);
         }
 
         try {
             poa.the_POAManager().activate();
-        } catch (AdapterInactive exception) {
+        } catch (UserException exception) {
             throw new IllegalStateException("Unable to activate Root POA", exception);
         }
 
@@ -151,14 +151,14 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         try {
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
             namingContextExt = NamingContextExtHelper.narrow(obj);
-        } catch (InvalidName exception) {
+        } catch (UserException exception) {
             throw new IllegalStateException("Unable to resolve Name Service", exception);
         }
 
         for (String topic : topics) {
             try {
                 org.omg.CORBA.Object obj = namingContextExt.resolve_str(topic);
-/*                EventChannel eventChannel = EventChannelHelper.narrow(obj);
+                EventChannel eventChannel = EventChannelHelper.narrow(obj);
 
                 Supplier supplier = new Supplier(topic);
 
@@ -177,7 +177,7 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
 
                 subscribers.put(topic, proxyPushSupplier);
 
-                consumers.put(topic, consumer); */
+                consumers.put(topic, consumer);
             } catch (UserException exception) {
                 throw new IllegalStateException("Error connecting publisher and subscriber for topic " + topic, exception);
             }
@@ -194,7 +194,7 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         if (orb == null) {
             throw new IllegalStateException("Events system has already been stopped");
         }
-/*
+
         consumers.clear();
 
         // Disconnect the publishers
@@ -204,7 +204,7 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
                 ProxyPushConsumer proxyPushConsumer = publishers.get(topic);
                 proxyPushConsumer.disconnect_push_consumer();
             } catch (Exception exception) {
-                LOGGER.error("stop(): error disconnecting publisher for topic " + topic, exception);
+                LOGGER.error("Error disconnecting publisher for topic " + topic, exception);
             }
         }
 
@@ -217,45 +217,46 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
                 ProxyPushSupplier proxyPushSupplier = subscribers.get(topic);
                 proxyPushSupplier.disconnect_push_supplier();
             } catch (Exception exception) {
-                LOGGER.error("stop(): error disconnecting subscriber for topic " + topic, exception);
+                LOGGER.error("Error disconnecting subscriber for topic " + topic, exception);
             }
         }
 
         subscribers.clear();
-*/
+
         // Shutdown the ORB
 
         try {
             orb.shutdown(false);
             orb.destroy();
         } catch (Exception exception) {
-            LOGGER.error("stop(): error stopping events system", exception);
+            LOGGER.error("Error stopping events system", exception);
         }
 
         orb = null;
     }
-/*
-    / **
-     * This class dispatches events to listeners.
-     * /
-    private static class Supplier extends PushSupplierPOA {
-        / **
-         * The topic.
-         * /
-        private String topic;
 
-        / **
+    /**
+     * This class dispatches events to listeners.
+     */
+    private static class Supplier extends PushSupplierPOA {
+        /**
+         * The topic.
+         */
+        private final String topic;
+
+        /**
          * Constructs a new instance of the consumer.
          *
          * @param t the topic
-         * /
-        public Supplier(final String t) {
+         */
+        private Supplier(final String t) {
             topic = t;
         }
 
-        / **
+        /**
          * Called when the consumer is disconnected.
-         * /
+         */
+        @Override
         public void disconnect_push_supplier() {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Supplier disconnected for topic " + topic);
@@ -263,29 +264,29 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         }
     }
 
-    / **
+    /**
      * This class dispatches events to listeners.
-     * /
+     */
     private static class Consumer extends PushConsumerPOA {
-        / **
+        /**
          * The topic.
-         * /
-        private String topic;
-        / **
+         */
+        private final String topic;
+        /**
          * The read-write lock.
-         * /
-        private ReadWriteLock lock = new ReentrantReadWriteLock();
-        / **
+         */
+        private final ReadWriteLock lock = new ReentrantReadWriteLock();
+        /**
          * The listeners to dispatch events to.
-         * /
-        private List<TopicListener> listeners = new ArrayList<TopicListener>();
+         */
+        private final List<TopicListener> listeners = new ArrayList<>();
 
-        / **
+        /**
          * Constructs a new instance of the consumer.
          *
          * @param t the topic
-         * /
-        public Consumer(final String t) {
+         */
+        private Consumer(final String t) {
             topic = t;
         }
 
@@ -307,32 +308,111 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
             }
         }
 
-        / **
+        /**
          * Called when the consumer is disconnected.
-         * /
+         */
+        @Override
         public void disconnect_push_consumer() {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Consumer disconnected for topic " + topic);
             }
         }
 
-        / **
+        /**
          * Called when an event is pushed by the supplier.
          *
          * @param data the event data
          * @throws Disconnected if the consumer is disconnected
-         * /
+         */
+        @Override
         public void push(final Any data) throws Disconnected {
-            try {
-                lock.readLock().lock();
-                Event event = EventHelper.extract(data);
-                for (TopicListener listener : listeners) {
-                    listener.receiveMessage(event.id, event.type);
+            Event event = Event.extract(data);
+            if (event != null) {
+                try {
+                    lock.readLock().lock();
+                    for (TopicListener listener : listeners) {
+                        listener.receiveEvent(event.id, event.type);
+                    }
+                } finally {
+                    lock.readLock().unlock();
                 }
-            } finally {
-                lock.readLock().unlock();
             }
         }
     }
-*/
+
+    /**
+     * This class provides a wrapper for event data and a utility method to
+     * extract event data from a CORBA Any.
+     */
+    private static class Event {
+        /**
+         * The id of the data the event concerns.
+         */
+        private final String id;
+        /**
+         * The type of event.
+         */
+        private final EventType type;
+
+        /**
+         * Construct an instance of an event.
+         *
+         * @param i the id of the data the event concerns
+         * @param t the type of event
+         */
+        private Event(final String i, final EventType t) {
+            id = i;
+            type = t;
+        }
+
+        /**
+         * Get the id of the data the event concerns.
+         *
+         * @return the id of the data the event concerns
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * Get the type of event.
+         *
+         * @return the type of event
+         */
+        public EventType getType() {
+            return type;
+        }
+
+        /**
+         * Extract event data from a CORBA Any.
+         *
+         * @param any the any
+         * @return the event data or null if the event is invalid
+         */
+        public static Event extract(final Any any) {
+            try {
+                String str = any.extract_string();
+
+                int i = str.lastIndexOf('_');
+                if (i == -1) {
+                    throw new IllegalArgumentException("Invalid event string '" + str + "'");
+                }
+
+                String id = str.substring(0, i);
+                String type = str.substring(i + 1);
+                if (id.isEmpty() || type.isEmpty()) {
+                    throw new IllegalArgumentException("Invalid event string '" + str + "'");
+                }
+
+                try {
+                    return new Event(id, EventType.valueOf(type));
+                } catch (IllegalArgumentException exception) {
+                    throw new IllegalArgumentException("Invalid event type '" + type + "'");
+                }
+            } catch (SystemException | IllegalArgumentException exception) {
+                LOGGER.warn("Failed to extract event", exception);
+                return null;
+            }
+        }
+    }
 }

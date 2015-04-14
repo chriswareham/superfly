@@ -14,7 +14,7 @@
         <constructor-value value="test"/>
     </component>
 
-    <component id="events" class="net.chriswareham.events.EventsJmsImpl">
+    <component id="eventService" class="net.chriswareham.events.JmsEventServiceImpl">
         <property name="connectionFactory" refid="pooledConnectionFactory"/>
         <map name="topic">
             <entry key="test" refid="destination"/>

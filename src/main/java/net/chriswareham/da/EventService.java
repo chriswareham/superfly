@@ -1,5 +1,5 @@
 /*
- * @(#) Events.java
+ * @(#) EventService.java
  *
  * Copyright (C) 2015, Chris Wareham, All Rights Reserved
  */
@@ -11,7 +11,7 @@ package net.chriswareham.da;
  *
  * @author Chris Wareham
  */
-public interface Events {
+public interface EventService {
     /**
      * Add a topic listener.
      *

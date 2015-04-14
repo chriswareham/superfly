@@ -1,5 +1,5 @@
 /*
- * @(#) EventsJmsImpl.java
+ * @(#) JmsEventServiceImpl.java
  *
  * Copyright (C) 2015, Chris Wareham, All Rights Reserved
  */
@@ -28,11 +28,11 @@ import net.chriswareham.di.LifecycleComponent;
  *
  * @author Chris Wareham
  */
-public class EventsJmsImpl implements Events, LifecycleComponent {
+public class JmsEventServiceImpl implements EventService, LifecycleComponent {
     /**
      * The logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(EventsJmsImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(JmsEventServiceImpl.class);
 
     /**
      * The connection factory.

@@ -62,17 +62,17 @@ public class MemoryCache<I, T> implements Cache<I, T>, TopicListener, LifecycleC
      */
     private Thread purger;
     /**
-     * The events module.
+     * The event service.
      */
-    private Events events;
+    private EventService eventService;
 
     /**
-     * Set the events module.
+     * Set the event service.
      *
-     * @param e the events module
+     * @param es the event service
      */
-    public void setEvents(final Events e) {
-        events = e;
+    public void setEventService(final EventService es) {
+        eventService = es;
     }
 
     /**
@@ -283,8 +283,8 @@ public class MemoryCache<I, T> implements Cache<I, T>, TopicListener, LifecycleC
 
         running = true;
 
-        if (events != null) {
-            events.addTopicListener("", this);
+        if (eventService != null) {
+            eventService.addTopicListener("", this);
         }
 
         if (purgeFrequency > 0) {
@@ -308,8 +308,8 @@ public class MemoryCache<I, T> implements Cache<I, T>, TopicListener, LifecycleC
 
         running = false;
 
-        if (events != null) {
-            events.removeTopicListener("", this);
+        if (eventService != null) {
+            eventService.removeTopicListener("", this);
         }
 
         if (purger != null) {
