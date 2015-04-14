@@ -14,8 +14,9 @@ import java.util.Set;
 //import java.util.concurrent.locks.ReadWriteLock;
 //import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-//import org.omg.CORBA.Any;
+import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.ORBPackage.InvalidName;
 //import org.omg.CosEventChannelAdmin.ConsumerAdmin;
 //import org.omg.CosEventChannelAdmin.EventChannel;
 //import org.omg.CosEventChannelAdmin.EventChannelHelper;
@@ -31,10 +32,12 @@ import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import org.apache.log4j.Logger;
 
 import net.chriswareham.di.LifecycleComponent;
+import org.omg.CORBA.UserException;
 
 /**
  * This class provides a CORBA based events service.
@@ -59,15 +62,15 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
     / **
      * The publishers.
      * /
-    private Map<String, ProxyPushConsumer> publishers = new HashMap<String, ProxyPushConsumer>();
+    private Map<String, ProxyPushConsumer> publishers = new HashMap<>();
     / **
      * The subscribers.
      * /
-    private Map<String, ProxyPushSupplier> subscribers = new HashMap<String, ProxyPushSupplier>();
+    private Map<String, ProxyPushSupplier> subscribers = new HashMap<>();
     / **
      * The consumers.
      * /
-    private Map<String, Consumer> consumers = new HashMap<String, Consumer>();
+    private Map<String, Consumer> consumers = new HashMap<>();
 */
     /**
      * Add a topic.
@@ -102,9 +105,9 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
     @Override
     public void publishEvent(final String topic, final Object id, final EventType type) {
 //        try {
-//            Any any = orb.create_any();
-//            any.insert_string(id.toString());
-//            any.insert_string(type.toString());
+            Any any = orb.create_any();
+            any.insert_string(id.toString());
+            any.insert_string(type.toString());
 
 //            ProxyPushConsumer proxyPushConsumer = publishers.get(topic);
 //            proxyPushConsumer.push(any);
@@ -133,13 +136,13 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         try {
             org.omg.CORBA.Object obj = orb.resolve_initial_references("RootPOA");
             poa = POAHelper.narrow(obj);
-        } catch (Exception exception) {
+        } catch (InvalidName exception) {
             throw new IllegalStateException("Unable to resolve Root POA", exception);
         }
 
         try {
             poa.the_POAManager().activate();
-        } catch (Exception exception) {
+        } catch (AdapterInactive exception) {
             throw new IllegalStateException("Unable to activate Root POA", exception);
         }
 
@@ -148,14 +151,14 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
         try {
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
             namingContextExt = NamingContextExtHelper.narrow(obj);
-        } catch (Exception exception) {
+        } catch (InvalidName exception) {
             throw new IllegalStateException("Unable to resolve Name Service", exception);
         }
-/*
+
         for (String topic : topics) {
             try {
                 org.omg.CORBA.Object obj = namingContextExt.resolve_str(topic);
-                EventChannel eventChannel = EventChannelHelper.narrow(obj);
+/*                EventChannel eventChannel = EventChannelHelper.narrow(obj);
 
                 Supplier supplier = new Supplier(topic);
 
@@ -174,12 +177,12 @@ public class EventsCorbaImpl implements Events, LifecycleComponent {
 
                 subscribers.put(topic, proxyPushSupplier);
 
-                consumers.put(topic, consumer);
-            } catch (Exception exception) {
+                consumers.put(topic, consumer); */
+            } catch (UserException exception) {
                 throw new IllegalStateException("Error connecting publisher and subscriber for topic " + topic, exception);
             }
         }
-*/
+
         orb.run();
     }
 

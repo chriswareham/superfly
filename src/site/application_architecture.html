@@ -20,35 +20,37 @@
 architectural tiers - data access, business logic and presentation. Examples of
 data access classes include those that communicate with a persistent store such
 as a relational database. Examples of business logic classes include those that
-perform a card payment. In this framework, web applications implement <em>Action</em>
-classes that act as controllers, marshaling parameters and forwarding them to
-business logic and/or data access classes. The business logic and data access
-classes return classes that are used as data models for presentation via <em>View</em>
-classes. The data access and business logic classes are not bound to a specific
-presentation technology such as JSP, Velocity or XSLT, allowing for simpler
-testing and reuse. An example of a different presentation technology is Swing.</p>
+perform a card payment. In this framework, web applications implement
+<em>Action</em> classes that act as controllers, marshaling parameters and
+forwarding them to business logic and/or data access classes. The business logic
+and data access classes return classes that are used as data models for
+presentation via <em>View</em> classes. The data access and business logic
+classes are not bound to a specific presentation technology such as JSP,
+Velocity or XSLT, allowing for simpler testing and reuse. Examples of different
+presentation technologies include Swing and JavaFX.</p>
 <p><img src="code_base.png" width="800" height="636" alt="[code_base]"/></p>
 <h3>Framework</h3>
-<p>The bulk of the code base in a typical application is composed of data access
-and business logic classes that are combined into an application by a
-lightweight dependency injection framework. This framework is found in the
+<p>The bulk of the code base in a typical application is composed of data
+access, service and business logic classes that are combined into an application
+by a lightweight dependency injection framework. This framework is found in the
 <code>net.chriswareham.di</code> package, and is based around the
 <code>net.chriswareham.di.ComponentFactory</code> interface. This
 interface is implemented by the
 <code>net.chriswareham.di.DefaultComponentFactory</code> class, which
-processes a simple XML configuration file. The configuration file, which should
-conform to the <a href="components.dtd">Components DTD</a>, contains
-declarations for each data access and business logic class that makes up an
-application, as shown in the following example:</p>
+processes a simple XML configuration file. A minimal configuration file can be
+found <a href="components.xml">here</a>, and conforms to the
+<a href="components.dtd">Components DTD</a>. It contains declarations for each
+data access, service and business logic class that makes up the application, as
+shown in the following example:</p>
 <pre class="boxed">
 <strong>&lt;components&gt;
 
     &lt;component id="</strong>dataSource<strong>" class="</strong>org.postgresql.ds.PGSimpleDataSource<strong>"&gt;
-        &lt;property name="</strong>serverName<strong>" value="</strong>@DATABASE_SERVER@<strong>"/&gt;
-        &lt;property name="</strong>portNumber<strong>" value="</strong>@DATABASE_PORT@<strong>"/&gt;
-        &lt;property name="</strong>databaseName<strong>" value="</strong>@DATABASE_NAME@<strong>"/&gt;
-        &lt;property name="</strong>user<strong>" value="</strong>@DATABASE_USER@<strong>"/&gt;
-        &lt;property name="</strong>password<strong>" value="</strong>@DATABASE_PASSWORD@<strong>"/&gt;
+        &lt;property name="</strong>serverName<strong>" value="</strong>localhost<strong>"/&gt;
+        &lt;property name="</strong>portNumber<strong>" value="</strong>5432<strong>"/&gt;
+        &lt;property name="</strong>databaseName<strong>" value="</strong>test<strong>"/&gt;
+        &lt;property name="</strong>user<strong>" value="</strong>username<strong>"/&gt;
+        &lt;property name="</strong>password<strong>" value="</strong>p4ssw0rd<strong>"/&gt;
     &lt;/component&gt;
 
     &lt;component id="</strong>dataSourceWrapper<strong>" class="</strong>net.chriswareham.da.DataSourceImpl<strong>"&gt;
@@ -63,24 +65,27 @@ application, as shown in the following example:</p>
         &lt;property name="</strong>dataSource<strong>" refid="</strong>dataSourceWrapper<strong>"/&gt;
     &lt;/component&gt;
 
-    &lt;component id="</strong>venueDao<strong>" class="</strong>com.test.app.VenueDaoImpl<strong>"&gt;
+    &lt;component id="</strong>venueDao<strong>" class="</strong>com.test.dao.VenueDaoImpl<strong>"/&gt;
+
+    &lt;component id="</strong>venueService<strong>" class="</strong>com.test.service.VenueServiceImpl<strong>"&gt;
         &lt;property name="</strong>queryService<strong>" refid="</strong>queryService<strong>"/&gt;
-        &lt;property name="</strong>cacheEnabled<strong>" value="</strong>@CACHE_ENABLED@<strong>"/&gt;
+        &lt;property name="</strong>cacheEnabled<strong>" value="</strong>true<strong>"/&gt;
         &lt;property name="</strong>purgeTime<strong>" value="</strong>60<strong>"/&gt;
         &lt;property name="</strong>purgeFrequency<strong>" value="</strong>5<strong>"/&gt;
+        &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"/&gt;
     &lt;/component&gt;
 
 &lt;/components&gt;</strong>
 </pre>
 <p>A component has an id, which must be unique within the configuration, and can
 have properties that are either a value (a Java primitive type) or a reference
-to the id of a previously declared component. Properties must be exposed by the
-implementing class as JavaBean setters, which must not be overloaded. As well as
-single values, lists and maps of values or references can be declared as
-follows:</p>
+to the id of a previously declared component. Properties should be exposed by
+the implementing class as JavaBean setters, which must not be overloaded. This
+is known as <em>Type 2</em> or <em>Setter Injection</em>. As well as single
+values, lists and maps of values or references can be declared as follows:</p>
 <pre class="boxed">
 <strong>&lt;component id="</strong>venueCreator<strong>" class="</strong>com.test.app.VenueCreatorImpl<strong>"&gt;
-    &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"&gt;
+    &lt;property name="</strong>venueService<strong>" refid="</strong>venueService<strong>"&gt;
     &lt;property name="</strong>maxDescriptionLength<strong>" value="</strong>2000<strong>"&gt;
     &lt;list name="</strong>permittedCategories<strong>"&gt;
         &lt;item value="</strong>guesthouse<strong>"/&gt;
@@ -94,6 +99,12 @@ follows:</p>
     &lt;/map&gt;
 &lt;/component&gt;</strong>
 </pre>
+<p>Properties can also be exposed as constructor arguments. This is known as
+<em>Type 3</em> or <em>Constructor Injection</em>. This can be mixed with setter
+injection if desired, although this constructor injection was implemented mainly
+as way of integrating third party objects without needing to write wrappers. For
+example, a components file for a JMS events implementation using ActiveMQ can be
+found <a href="events_components.xml">here</a>.</p>
 <p>To initialise a component factory, an instance of a class implementing the
 <code>net.chriswareham.di.ResourceResolver</code> interface must be
 passed to the <code>setResourceResolver()</code> method, and the name of the
@@ -136,7 +147,7 @@ declared in a configuration file, and that file used by both a web application
 and the standalone application:</p>
 <pre class="boxed">
 <strong>&lt;component id="</strong>venueLoader<strong>" class="</strong>com.test.app.VenueLoaderImpl<strong>" instantiation="</strong>demand<strong>"&gt;
-    &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"&gt;
+    &lt;property name="</strong>venueService<strong>" refid="</strong>venueService<strong>"&gt;
 &lt;/component&gt;</strong>
 </pre>
 <p>There are also classes that implement pooling for database connections and
@@ -154,7 +165,8 @@ method:</p>
 </pre>
 <p>A pooling implementation is provided by the <code>net.chriswareham.da.DataSourceImpl</code>
 class, which uses the Apache Commons Pool and DBCP libraries.</p>
-<p>Cache classes implement the <code>net.chriswareham.da.Cache</code> interface, which has the following methods:</p>
+<p>Cache classes implement the <code>net.chriswareham.da.Cache</code> interface,
+which has the following methods:</p>
 <pre class="boxed">
     /**
      * Fetches an object.
@@ -192,6 +204,8 @@ class, which uses the Apache Commons Pool and DBCP libraries.</p>
      */
     <strong>void</strong> flush();
 </pre>
+<p>A common pattern is to wrap a data access class in a service class, and have
+the service class manage caching and transaction boundaries.</p>
 <p>A framework for implementing the MVC (Model View Controller) pattern in web
 applications can also be found in the <code>net.chriswareham.mvc</code>
 package. It is similar to other MVC frameworks such as the ones found in Spring
@@ -203,7 +217,7 @@ pattern) and <em>views</em>. These interceptors, actions and views are defined
 in a configuration file that uses the same XML format as the dependency
 injection framework:</p>
 <pre class="boxed">
-<strong>&lt;component id="</strong>authenticatingInterceptor<strong>" class="</strong>com.test.app.AuthenticatingActionInterceptor<strong>"&gt;
+<strong>&lt;component id="</strong>authenticatingInterceptor<strong>" class="</strong>com.test.web.AuthenticatingActionInterceptor<strong>"&gt;
     &lt;property name="</strong>userDao<strong>" refid="</strong>userDao<strong>"/&gt;
     &lt;property name="</strong>cookieName<strong>" value="</strong>User<strong>"/&gt;
     &lt;property name="</strong>cookieDomain<strong>" value="</strong>.example.com<strong>"/&gt;
@@ -212,8 +226,8 @@ injection framework:</p>
 &lt;/component&gt;</strong>
 </pre>
 <pre class="boxed">
-<strong>&lt;component id="</strong>venueAction<strong>" class="</strong>com.test.app.VenueFinderAction<strong>"&gt;
-    &lt;property name="</strong>path<strong>" value="/venues"/&gt;
+<strong>&lt;component id="</strong>venueAction<strong>" class="</strong>com.test.web.VenueFinderAction<strong>"&gt;
+    &lt;property name="</strong>path<strong>" value="</strong>/venues"<strong>/&gt;
     &lt;property name="</strong>venueDao<strong>" refid="</strong>venueDao<strong>"/&gt;
     &lt;property name="</strong>viewName<strong>" value="</strong>venueView<strong>"/&gt;
 &lt;/component&gt;</strong>
@@ -300,23 +314,48 @@ JSON or perform a redirect.</p>
 <p>The data access and business logic tiers define an API (Application
 Programming Interface) which are a set of Java methods defined in interfaces.
 These interfaces define a <em>contract</em> between the API user and concrete
-implementations of the interfaces. As an example, the following interface
-provides an API for dealing with users:</p>
+implementations of the interfaces. As an example, the following interfaces
+provide an API for dealing with users:</p>
 <pre class="boxed">
+<strong>package</strong> com.test.dao;
+
 <strong>import</strong> java.util.List;
 
+<strong>import</strong> net.chriswareham.da.QueryConnection;
+
+<strong>import</strong> com.test.model.User;
+
 <strong>public interface</strong> UserDao {
-    List&lt;User&gt; search(UserSearchCriteria criteria) <strong>throws</strong> UserDaoException;
+    List&lt;User&gt; search(QueryConnection connection, UserSearchCriteria criteria);
 
-    User read(<strong>int</strong> userId) <strong>throws</strong> UserDaoException;
+    User read(QueryConnection connection, <strong>int</strong> userId);
 
-    User read(<strong>int</strong> userId, String passwordHash) <strong>throws</strong> UserDaoException;
+    User read(QueryConnection connection, <strong>int</strong> userId, String passwordHash);
 
-    <strong>void</strong> create(User user) <strong>throws</strong> UserDaoException;
+    <strong>void</strong> create(QueryConnection connection, User user);
 
-    <strong>void</strong> update(User user) <strong>throws</strong> UserDaoException;
+    <strong>void</strong> update(QueryConnection connection, User user);
 
-    <strong>void</strong> delete(<strong>int</strong> userId) <strong>throws</strong> UserDaoException;
+    <strong>void</strong> delete(QueryConnection connection, <strong>int</strong> userId);
+}
+</pre>
+<pre class="boxed">
+<strong>package</strong> com.test.service;
+
+<strong>import</strong> java.util.List;
+
+<strong>public interface</strong> UserService {
+    List&lt;User&gt; search(UserSearchCriteria criteria);
+
+    User read(<strong>int</strong> userId);
+
+    User read(<strong>int</strong> userId, String passwordHash);
+
+    <strong>void</strong> create(User user);
+
+    <strong>void</strong> update(User user);
+
+    <strong>void</strong> delete(<strong>int</strong> userId);
 }
 </pre>
 <p>This is a typical example of the CRUD (Create, Read, Update, Delete) pattern
@@ -332,6 +371,8 @@ information is also aggregated into a JavaBean, which opens up the possibility
 of using sophisticated Java features such as reflection and serialisation. As an
 example, the following class defines a user bean:</p>
 <pre class="boxed">
+<strong>package</strong> com.test.model;
+
 <strong>import</strong> java.io.Serializable;
 
 <strong>public class</strong> User <strong>implements</strong> Serializable {
@@ -369,6 +410,7 @@ example, the following class defines a user bean:</p>
 <code>Object</code> class, and may implement the <code>compareTo()</code> method
 from the <code>Comparable</code> interface. For example:</p>
 <pre class="boxed">
+    <em>@Override</em>
     <strong>public int</strong> compareTo(<strong>final</strong> User user) {
         <strong>return</strong> userName == <strong>null</strong> ? user.userName == <strong>null</strong> ? 0 : 1 : userName.compareTo(user.userName);
     }

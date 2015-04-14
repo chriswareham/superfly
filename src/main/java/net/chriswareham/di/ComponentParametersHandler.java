@@ -7,6 +7,7 @@
 package net.chriswareham.di;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,6 +130,7 @@ public class ComponentParametersHandler extends DefaultHandler {
             source.setSystemId(resourceResolver.getResourcePath(componentResource));
 
             XMLReader reader = XMLReaderFactory.createXMLReader();
+            reader.setEntityResolver((final String publicId, final String systemId) -> new InputSource(new StringReader("")));
             reader.setContentHandler(this);
             reader.parse(source);
         } catch (SAXParseException exception) {

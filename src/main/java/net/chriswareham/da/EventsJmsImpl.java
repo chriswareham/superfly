@@ -72,7 +72,7 @@ public class EventsJmsImpl implements Events, LifecycleComponent {
     @Override
     public void addTopicListener(final String topic, final TopicListener listener) {
         if (!listeners.containsKey(topic)) {
-            listeners.put(topic, new CopyOnWriteArrayList<TopicListener>());
+            listeners.put(topic, new CopyOnWriteArrayList<>());
         }
         listeners.get(topic).add(listener);
     }

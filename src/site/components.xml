@@ -3,11 +3,11 @@
 <components>
 
     <component id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
-        <property name="serverName" value="@DATABASE_SERVER@"/>
-        <property name="portNumber" value="@DATABASE_PORT@"/>
-        <property name="databaseName" value="@DATABASE_NAME@"/>
-        <property name="user" value="testuser"/>
-        <property name="password" value="t3stp4ssw0rd"/>
+        <property name="serverName" value="localhost"/>
+        <property name="portNumber" value="5432"/>
+        <property name="databaseName" value="test"/>
+        <property name="user" value="username"/>
+        <property name="password" value="p4ssw0rd"/>
     </component>
 
     <component id="dataSourceWrapper" class="net.chriswareham.da.DataSourceImpl">
@@ -23,7 +23,7 @@
     </component>
 
     <component id="serialiser" class="net.chriswareham.da.SerialiserServiceImpl">
-        <property name="key" value="XXX"/>
+        <property name="key" value="s3cr3t"/>
     </component>
 
 </components>

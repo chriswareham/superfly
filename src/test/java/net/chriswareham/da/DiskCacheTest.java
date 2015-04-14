@@ -6,6 +6,7 @@
 
 package net.chriswareham.da;
 
+import java.io.File;
 import java.io.Serializable;
 
 import org.junit.After;
@@ -58,7 +59,11 @@ public class DiskCacheTest {
      */
     @After
     public void tearDown() throws Exception {
+        cache.flush();
         cache.stop();
+
+        File cacheDirectory = new File(CACHE_DIRECTORY);
+        cacheDirectory.delete();
     }
 
     /**
