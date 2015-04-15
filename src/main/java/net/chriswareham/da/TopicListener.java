@@ -15,8 +15,7 @@ public interface TopicListener {
     /**
      * Receive an event.
      *
-     * @param id the event identifier
-     * @param type the type of event
+     * @param event the event
      */
-    void receiveEvent(Object id, EventType type);
+    void receiveEvent(Event event);
 }

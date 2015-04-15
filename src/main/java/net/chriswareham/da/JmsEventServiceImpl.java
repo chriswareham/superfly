@@ -6,7 +6,6 @@
 
 package net.chriswareham.da;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,7 @@ public class JmsEventServiceImpl implements EventService, LifecycleComponent {
      * {@inheritDoc}
      */
     @Override
-    public void publishEvent(final String topic, final Object id, final EventType type) {
+    public void publishEvent(final String topic, final Event event) {
         if (!topics.containsKey(topic)) {
             throw new IllegalArgumentException("Invalid topic '" + topic + "'");
         }
@@ -104,8 +103,7 @@ public class JmsEventServiceImpl implements EventService, LifecycleComponent {
             connection.start();
 
             MessageProducer producer = session.createProducer(topics.get(topic));
-
-            producer.send(session.createObjectMessage(new Event(id, type)));
+            producer.send(session.createObjectMessage(event));
         } catch (JMSException exception) {
             LOGGER.error("publishEvent(): failed to publish event", exception);
         } finally {
@@ -150,36 +148,6 @@ public class JmsEventServiceImpl implements EventService, LifecycleComponent {
             } catch (JMSException exception) {
                 LOGGER.error("closeConnection(): error closing connection", exception);
             }
-        }
-    }
-
-    /**
-     * This class provides an event.
-     */
-    private static class Event implements Serializable {
-        /**
-         * The serial version UID.
-         */
-        private static final long serialVersionUID = 1L;
-
-        /**
-         * The identifier of the object the event concerns.
-         */
-        private final Object id;
-        /**
-         * The event type.
-         */
-        private final EventType type;
-
-        /**
-         * Create an instance of an event.
-         *
-         * @param i the identifier of the object the event concerns
-         * @param t the event type
-         */
-        Event(final Object i, final EventType t) {
-            id = i;
-            type = t;
         }
     }
 }

@@ -32,8 +32,7 @@ public interface EventService {
      * Publish an event.
      *
      * @param topic the topic
-     * @param id the id of the event
-     * @param type the type of the event
+     * @param event the event
      */
-    void publishEvent(String topic, Object id, EventType type);
+    void publishEvent(String topic, Event event);
 }

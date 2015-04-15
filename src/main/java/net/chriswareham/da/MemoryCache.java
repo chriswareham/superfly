@@ -323,9 +323,12 @@ public class MemoryCache<I, T> implements Cache<I, T>, TopicListener, LifecycleC
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void receiveEvent(final Object id, final EventType type) {
-        if (type == EventType.UPDATE || type == EventType.DELETE) {
-            flush((I) id);
+    public void receiveEvent(final Event event) {
+        switch (event.getType()) {
+        case UPDATE:
+        case DELETE:
+            flush((I) event.getId());
+            break;
         }
     }
 

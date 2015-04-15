@@ -6,7 +6,13 @@
 
 package net.chriswareham.da;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +56,14 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
      * The logger.
      */
     private static final Logger LOGGER = Logger.getLogger(CorbaEventServiceImpl.class);
+    /**
+     * The (thread safe) Base64 encoder.
+     */
+    private static final Base64.Encoder ENCODER = Base64.getEncoder();
+    /**
+     * The (thread safe) Base64 decoder.
+     */
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
 
     /**
      * The Object Request Broker.
@@ -104,15 +118,21 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
      * {@inheritDoc}
      */
     @Override
-    public void publishEvent(final String topic, final Object id, final EventType type) {
+    public void publishEvent(final String topic, final Event event) {
         try {
+            String str = encode(event);
+            if (str == null) {
+                LOGGER.warn("Failed to encode event");
+                return;
+            }
+
             Any any = orb.create_any();
-            any.insert_string(id.toString() + "_" + type.toString());
+            any.insert_string(str);
 
             ProxyPushConsumer proxyPushConsumer = publishers.get(topic);
             proxyPushConsumer.push(any);
-        } catch (UserException exception) {
-            LOGGER.error("Publisher disconnected", exception);
+        } catch (SystemException | UserException exception) {
+            LOGGER.error("Unable to publish event", exception);
         }
     }
 
@@ -265,6 +285,38 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
     }
 
     /**
+     * Encode an event to a string.
+     *
+     * @param event the event to encode
+     * @return the event encoded to a string or null if the event is invalid
+     */
+    private static String encode(final Event event) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(event);
+            return new String(ENCODER.encode(baos.toByteArray()));
+        } catch (IOException exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Decode an event from a string.
+     *
+     * @param str the string to decode
+     * @return the event decoded from a string or null if the string is invalid
+     */
+    private static Event decode(final String str) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(DECODER.decode(str));
+        try (ObjectInputStream ois = new ObjectInputStream(bais)) {
+            Object obj = ois.readObject();
+            return Event.class.cast(obj);
+        } catch (IOException | ClassNotFoundException | ClassCastException exception) {
+            return null;
+        }
+   }
+
+    /**
      * This class dispatches events to listeners.
      */
     private static class Consumer extends PushConsumerPOA {
@@ -326,92 +378,23 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
          */
         @Override
         public void push(final Any data) throws Disconnected {
-            Event event = Event.extract(data);
-            if (event != null) {
+            try {
+                String str = data.extract_string();
+                Event event = decode(str);
+                if (event == null) {
+                    LOGGER.warn("Failed to decode event");
+                    return;
+                }
                 try {
                     lock.readLock().lock();
                     for (TopicListener listener : listeners) {
-                        listener.receiveEvent(event.id, event.type);
+                        listener.receiveEvent(event);
                     }
                 } finally {
                     lock.readLock().unlock();
                 }
-            }
-        }
-    }
-
-    /**
-     * This class provides a wrapper for event data and a utility method to
-     * extract event data from a CORBA Any.
-     */
-    private static class Event {
-        /**
-         * The id of the data the event concerns.
-         */
-        private final String id;
-        /**
-         * The type of event.
-         */
-        private final EventType type;
-
-        /**
-         * Construct an instance of an event.
-         *
-         * @param i the id of the data the event concerns
-         * @param t the type of event
-         */
-        private Event(final String i, final EventType t) {
-            id = i;
-            type = t;
-        }
-
-        /**
-         * Get the id of the data the event concerns.
-         *
-         * @return the id of the data the event concerns
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Get the type of event.
-         *
-         * @return the type of event
-         */
-        public EventType getType() {
-            return type;
-        }
-
-        /**
-         * Extract event data from a CORBA Any.
-         *
-         * @param any the any
-         * @return the event data or null if the event is invalid
-         */
-        public static Event extract(final Any any) {
-            try {
-                String str = any.extract_string();
-
-                int i = str.lastIndexOf('_');
-                if (i == -1) {
-                    throw new IllegalArgumentException("Invalid event string '" + str + "'");
-                }
-
-                String id = str.substring(0, i);
-                String type = str.substring(i + 1);
-                if (id.isEmpty() || type.isEmpty()) {
-                    throw new IllegalArgumentException("Invalid event string '" + str + "'");
-                }
-
-                try {
-                    return new Event(id, EventType.valueOf(type));
-                } catch (IllegalArgumentException exception) {
-                    throw new IllegalArgumentException("Invalid event type '" + type + "'");
-                }
-            } catch (SystemException | IllegalArgumentException exception) {
-                LOGGER.warn("Failed to extract event", exception);
-                return null;
+            } catch (SystemException exception) {
+                LOGGER.error("Unable to receive event", exception);
             }
         }
     }
