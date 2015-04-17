@@ -62,7 +62,7 @@ public class DefaultTable extends JTable {
     /**
      * The table model.
      */
-    private BaseTableModel tableModel;
+    private final BaseTableModel tableModel;
 
     /**
      * Construct an instance of the default table.

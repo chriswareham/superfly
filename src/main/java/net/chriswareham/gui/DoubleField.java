@@ -92,7 +92,7 @@ public class DoubleField extends JTextField {
      */
     public Double getDouble() {
         String text = getText();
-        return PATTERN.matcher(text).matches() ? Double.valueOf(text) : Double.valueOf(0.0);
+        return PATTERN.matcher(text).matches() ? Double.valueOf(text) : 0.0;
     }
 
     /**
@@ -121,14 +121,14 @@ public class DoubleField extends JTextField {
         /**
          * The maximum number of the double that can be entered.
          */
-        private int maximumLength;
+        private final int maximumLength;
 
         /**
          * Create an instance of the double document.
          *
          * @param ml the maximum length of the double that can be entered
          */
-        public DoubleDocument(final int ml) {
+        private DoubleDocument(final int ml) {
             maximumLength = ml;
         }
 

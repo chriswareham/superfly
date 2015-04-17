@@ -99,14 +99,14 @@ public class PostcodeField extends JTextField {
         /**
          * The maximum length of the postcode that can be entered.
          */
-        private int maximumLength;
+        private final int maximumLength;
 
         /**
          * Create an instance of the telephone document.
          *
          * @param ml the maximum length of the telephone that can be entered
          */
-        public PostcodeDocument(final int ml) {
+        private PostcodeDocument(final int ml) {
             maximumLength = ml;
         }
 

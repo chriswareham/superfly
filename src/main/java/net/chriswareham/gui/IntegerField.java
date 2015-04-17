@@ -92,7 +92,7 @@ public class IntegerField extends JTextField {
      */
     public Integer getInteger() {
         String text = getText();
-        return PATTERN.matcher(text).matches() ? Integer.valueOf(text) : Integer.valueOf(0);
+        return PATTERN.matcher(text).matches() ? Integer.valueOf(text) : 0;
     }
 
     /**
@@ -121,14 +121,14 @@ public class IntegerField extends JTextField {
         /**
          * The maximum number of the double that can be entered.
          */
-        private int maximumLength;
+        private final int maximumLength;
 
         /**
          * Create an instance of the double document.
          *
          * @param ml the maximum length of the double that can be entered
          */
-        public IntegerDocument(final int ml) {
+        private IntegerDocument(final int ml) {
             maximumLength = ml;
         }
 

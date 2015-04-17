@@ -99,14 +99,14 @@ public class TelephoneField extends JTextField {
         /**
          * The maximum length of the telephone that can be entered.
          */
-        private int maximumLength;
+        private final int maximumLength;
 
         /**
          * Create an instance of the telephone document.
          *
          * @param ml the maximum length of the telephone that can be entered
          */
-        public TelephoneDocument(final int ml) {
+        private TelephoneDocument(final int ml) {
             maximumLength = ml;
         }
 

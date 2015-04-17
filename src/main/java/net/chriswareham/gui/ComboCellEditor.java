@@ -27,7 +27,7 @@ public class ComboCellEditor<T extends Comparable<? super T>> extends DefaultCel
     /**
      * The combo box editor component.
      */
-    private JComboBox<T> comboBox;
+    private final JComboBox<T> comboBox;
 
     /**
      * Construct an instance of the editor for table cells containing combo

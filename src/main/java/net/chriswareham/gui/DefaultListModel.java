@@ -27,7 +27,7 @@ public class DefaultListModel<T extends Comparable<? super T>> extends AbstractL
     /**
      * The list of rows that make up the model.
      */
-    private List<T> rows = new ArrayList<>();
+    private final List<T> rows = new ArrayList<>();
 
     /**
      * Get the number of rows in the model.

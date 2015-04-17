@@ -160,13 +160,13 @@ public class IdentifierField extends JTextField {
         private static final long serialVersionUID = 1L;
 
         /**
-         * The maximum length of the identifier that can be entered.
-         */
-        private int maximumLength;
-        /**
          * The identifier pattern.
          */
-        private Pattern pattern;
+        private final Pattern pattern;
+        /**
+         * The maximum length of the identifier that can be entered.
+         */
+        private final int maximumLength;
 
         /**
          * Construct an instance of the identifier document.
@@ -174,7 +174,7 @@ public class IdentifierField extends JTextField {
          * @param p the identifier pattern
          * @param ml the maximum length of the identifier that can be entered
          */
-        public IdentifierDocument(final Pattern p, final int ml) {
+        private IdentifierDocument(final Pattern p, final int ml) {
             pattern = p;
             maximumLength = ml;
         }

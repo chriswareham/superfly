@@ -13,7 +13,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class SearchDialog extends JDialog {
     /**
      * The event listeners.
      */
-    private List<SearchDialogListener> listeners;
+    private final List<SearchDialogListener> listeners = new CopyOnWriteArrayList<>();
     /**
      * The search string text field.
      */
@@ -107,8 +106,6 @@ public class SearchDialog extends JDialog {
      * @param tableModel the table model to list the searchable table columns of
      */
     private void createInterface(final Window parent, final SortedTableModel<?> tableModel) {
-        listeners = new CopyOnWriteArrayList<>();
-
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent event) {
@@ -163,20 +160,14 @@ public class SearchDialog extends JDialog {
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         JButton button = new JButton("Search");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                search();
-            }
+        button.addActionListener((final ActionEvent event) -> {
+            search();
         });
         buttonPanel.add(button);
 
         button = new JButton("Close");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                close();
-            }
+        button.addActionListener((final ActionEvent event) -> {
+            close();
         });
         buttonPanel.add(button);
 
@@ -216,11 +207,11 @@ public class SearchDialog extends JDialog {
      */
     private static class SearchTableRow {
         /** The table column name. */
-        private String name;
+        private final String name;
+        /** The table column index. */
+        private final int index;
         /** Whether the table column is selected. */
         private boolean selected;
-        /** The table column index. */
-        private int index;
 
         /**
          * Construct an instance of the table model row.
@@ -229,10 +220,10 @@ public class SearchDialog extends JDialog {
          * @param s whether the table column is selected
          * @param i the table column index
          */
-        public SearchTableRow(final String n, final boolean s, final int i) {
+        private SearchTableRow(final String n, final boolean s, final int i) {
             name = n;
-            selected = s;
             index = i;
+            selected = s;
         }
 
         /**
@@ -286,7 +277,7 @@ public class SearchDialog extends JDialog {
          *
          * @param tableModel the table model to list the searchable table columns of
          */
-        public SearchTableModel(final SortedTableModel<?> tableModel) {
+        private SearchTableModel(final SortedTableModel<?> tableModel) {
             addColumn(new StringTableColumn("Column", 225));
             addColumn(new BooleanTableColumn("Search", 75, true, SwingConstants.CENTER));
 
@@ -334,7 +325,7 @@ public class SearchDialog extends JDialog {
                 break;
             case 1:
                 Boolean selected = (Boolean) value;
-                row.setSelected(selected.booleanValue());
+                row.setSelected(selected);
                 fireTableCellUpdated(ri, ci);
                 break;
             default:

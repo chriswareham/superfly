@@ -42,7 +42,7 @@ public class BooleanCellRenderer extends DefaultTableCellRenderer {
     /**
      * The boolean renderer component.
      */
-    private JCheckBox checkBox;
+    private final JCheckBox checkBox;
 
     /**
      * Construct an instance of the renderer for table cells containing booleans.
@@ -69,8 +69,7 @@ public class BooleanCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean selected, final boolean focused, final int row, final int column) {
         if (value instanceof Boolean) {
-            Boolean b = (Boolean) value;
-            checkBox.setSelected(b.booleanValue());
+            checkBox.setSelected((Boolean) value);
         }
 
         if (focused) {

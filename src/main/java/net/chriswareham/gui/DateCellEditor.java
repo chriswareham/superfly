@@ -26,7 +26,7 @@ public class DateCellEditor extends DefaultCellEditor {
     /**
      * The date field editor component.
      */
-    private DateField dateField;
+    private final DateField dateField;
 
     /**
      * Construct an instance of the editor for table cells containing dates.

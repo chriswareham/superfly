@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -84,11 +83,8 @@ public class XmlDialog extends JDialog {
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         JButton button = new JButton("Close");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                close();
-            }
+        button.addActionListener((final ActionEvent event) -> {
+            close();
         });
         buttonPanel.add(button);
     }
@@ -139,7 +135,7 @@ public class XmlDialog extends JDialog {
         /**
          * The buffer for capturing data.
          */
-        private StringBuilder buf;
+        private final StringBuilder buf;
         /**
          * The current node of the tree model.
          */
@@ -147,12 +143,12 @@ public class XmlDialog extends JDialog {
         /**
          * The tree model to populate.
          */
-        private DefaultTreeModel treeModel;
+        private final DefaultTreeModel treeModel;
 
         /**
          * Constructs a new instance of the Handler class.
          */
-        public Handler() {
+        private Handler() {
             buf = new StringBuilder();
             currentNode = new DefaultMutableTreeNode("<?xml version='1.0'?>");
             treeModel = new DefaultTreeModel(currentNode);

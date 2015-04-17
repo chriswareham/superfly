@@ -26,11 +26,11 @@ public class CoordinateField extends JPanel {
     /**
      * The x coordinate field.
      */
-    private DoubleField xField;
+    private final DoubleField xField;
     /**
      * The y coordinate field.
      */
-    private DoubleField yField;
+    private final DoubleField yField;
 
     /**
      * Construct an instance of the widget for selecting coordinates.

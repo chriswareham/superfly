@@ -23,8 +23,17 @@ public class DefaultTextArea extends JTextArea {
      * Construct an instance of the default text area.
      */
     public DefaultTextArea() {
+        this(true);
+    }
+
+    /**
+     * Construct an instance of the default text area.
+     *
+     * @param lineWrap whether to wrap lines
+     */
+    public DefaultTextArea(final boolean lineWrap) {
         super(12, 24);
-        setLineWrap(true);
+        setLineWrap(lineWrap);
         setWrapStyleWord(true);
     }
 

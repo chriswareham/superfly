@@ -55,7 +55,7 @@ public class ImagePreviewPanel extends JPanel implements PropertyChangeListener 
     /**
      * The image label.
      */
-    private JLabel label;
+    private final JLabel label;
 
     /**
      * Construct an instance of the panel for displaying an image preview.

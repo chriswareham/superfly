@@ -42,7 +42,7 @@ public class ComboCellRenderer extends DefaultTableCellRenderer {
     /**
      * The combo box renderer component.
      */
-    private JComboBox<Object> comboBox;
+    private final JComboBox<Object> comboBox;
 
     /**
      * Construct an instance of the renderer for table cells containing combo

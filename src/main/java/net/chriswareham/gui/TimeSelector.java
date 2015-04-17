@@ -45,28 +45,7 @@ public class TimeSelector extends JPanel {
      */
     public TimeSelector() {
         super(new GridBagLayout());
-
-        calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(0L);
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        c.weightx = 1.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        hourModel = new SpinnerNumberModel(0, 0, 23, 1);
-        add(new JSpinner(hourModel), c);
-
-        c.insets.left = 8;
-        c.weightx = 0.0;
-        c.gridx++;
-        add(new JLabel(":"), c);
-
-        c.weightx = 1.0;
-        c.gridx++;
-        minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
-        add(new JSpinner(minuteModel), c);
+        createInterface();
     }
 
     /**
@@ -89,5 +68,32 @@ public class TimeSelector extends JPanel {
         calendar.setTime(time);
         hourModel.setValue(calendar.get(Calendar.HOUR_OF_DAY));
         minuteModel.setValue(calendar.get(Calendar.MINUTE));
+    }
+
+    /**
+     * Create the interface.
+     */
+    private void createInterface() {
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(0L);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        c.weightx = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        hourModel = new SpinnerNumberModel(0, 0, 23, 1);
+        add(new JSpinner(hourModel), c);
+
+        c.insets.left = 8;
+        c.weightx = 0.0;
+        c.gridx++;
+        add(new JLabel(":"), c);
+
+        c.weightx = 1.0;
+        c.gridx++;
+        minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
+        add(new JSpinner(minuteModel), c);
     }
 }

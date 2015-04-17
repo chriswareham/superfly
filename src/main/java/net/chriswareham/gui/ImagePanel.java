@@ -17,7 +17,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -32,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.chriswareham.util.Images;
 
@@ -99,11 +97,8 @@ public class ImagePanel extends JPanel {
         c.weightx = 1.0;
         c.gridx++;
         scaleSlider = new JSlider(1, 100, 100);
-        scaleSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(final ChangeEvent event) {
-                imageComponent.setScale(scaleSlider.getValue() / 100.0);
-            }
+        scaleSlider.addChangeListener((final ChangeEvent event) -> {
+            imageComponent.setScale(scaleSlider.getValue() / 100.0);
         });
         scaleSlider.setEnabled(false);
         add(scaleSlider, c);
@@ -111,12 +106,9 @@ public class ImagePanel extends JPanel {
         c.weightx = 0.0;
         c.gridx++;
         resizeButton = new JButton("Resize");
-        resizeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                imageComponent.cropImage();
-                scaleSlider.setValue(100);
-            }
+        resizeButton.addActionListener((final ActionEvent event) -> {
+            imageComponent.cropImage();
+            scaleSlider.setValue(100);
         });
         resizeButton.setEnabled(false);
         add(resizeButton, c);

@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -92,11 +91,8 @@ public class HtmlDialog extends JDialog {
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         JButton button = new JButton("Close");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                close();
-            }
+        button.addActionListener((final ActionEvent event) -> {
+            close();
         });
         buttonPanel.add(button);
     }

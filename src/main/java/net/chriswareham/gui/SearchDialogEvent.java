@@ -24,15 +24,15 @@ public class SearchDialogEvent extends EventObject {
     /**
      * The search string.
      */
-    private String searchString;
+    private final String searchString;
     /**
      * The table columns to search.
      */
-    private List<Integer> searchColumns;
+    private final List<Integer> searchColumns;
     /**
      * Whether to search for an exact match.
      */
-    private boolean exactMatch;
+    private final boolean exactMatch;
 
     /**
      * Construct an instance of the event that describes a table search.

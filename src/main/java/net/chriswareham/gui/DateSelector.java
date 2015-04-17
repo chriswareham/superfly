@@ -9,7 +9,6 @@ package net.chriswareham.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -43,13 +42,13 @@ public class DateSelector extends JPanel {
     }
 
     /**
+     * The date format.
+     */
+    private final DateFormat dateFormat;
+    /**
      * The date.
      */
     private Date date;
-    /**
-     * The date format.
-     */
-    private DateFormat dateFormat;
     /**
      * The text field.
      */
@@ -71,39 +70,7 @@ public class DateSelector extends JPanel {
     public DateSelector(final DateFormat df) {
         super(new GridBagLayout());
         dateFormat = df;
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        c.weightx = 1.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        textField = new JTextField(16);
-        textField.setEditable(false);
-        add(textField, c);
-
-        c.insets.left = 8;
-        c.weightx = 0.0;
-        c.gridx++;
-        selectButton = new JButton(SELECT_DATE_ICON);
-        selectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                pickDate();
-            }
-        });
-        add(selectButton, c);
-
-        c.gridx++;
-        clearButton = new JButton(CLEAR_DATE_ICON);
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent event) {
-                setDate(null);
-            }
-        });
-        clearButton.setEnabled(false);
-        add(clearButton, c);
+        createInterface();
     }
 
     /**
@@ -121,14 +88,48 @@ public class DateSelector extends JPanel {
      * @param d the date
      */
     public void setDate(final Date d) {
-        date = d;
-        if (date != null) {
+        if (d != null) {
+            date = date != null ? date : new Date(0L);
+            date.setTime(d.getTime());
             textField.setText(dateFormat.format(date));
             clearButton.setEnabled(true);
         } else {
+            date = null;
             textField.setText(null);
             clearButton.setEnabled(false);
         }
+    }
+
+    /**
+     * Create the interface.
+     */
+    private void createInterface() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        c.weightx = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        textField = new JTextField(16);
+        textField.setEditable(false);
+        add(textField, c);
+
+        c.insets.left = 8;
+        c.weightx = 0.0;
+        c.gridx++;
+        selectButton = new JButton(SELECT_DATE_ICON);
+        selectButton.addActionListener((final ActionEvent event) -> {
+            pickDate();
+        });
+        add(selectButton, c);
+
+        c.gridx++;
+        clearButton = new JButton(CLEAR_DATE_ICON);
+        clearButton.addActionListener((final ActionEvent event) -> {
+            setDate(null);
+        });
+        clearButton.setEnabled(false);
+        add(clearButton, c);
     }
 
     /**
@@ -136,11 +137,8 @@ public class DateSelector extends JPanel {
      */
     private void pickDate() {
         DatePicker datePicker = new DatePicker(date);
-        datePicker.addDatePickerListener(new DatePickerListener() {
-            @Override
-            public void datePicked(final Date d) {
-                setDate(d);
-            }
+        datePicker.addDatePickerListener((final Date d) -> {
+            setDate(d);
         });
         datePicker.setLocationRelativeTo(selectButton);
         datePicker.setVisible(true);

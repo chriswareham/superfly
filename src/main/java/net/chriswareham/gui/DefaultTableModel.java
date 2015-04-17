@@ -29,7 +29,9 @@ public abstract class DefaultTableModel<T> extends BaseTableModel {
     private final List<T> rows = new ArrayList<>();
 
     /**
-     * {@inheritDoc}
+     * Get whether there are no rows in the model.
+     *
+     * @return whether there are no rows in the model
      */
     @Override
     public boolean isRowsEmpty() {

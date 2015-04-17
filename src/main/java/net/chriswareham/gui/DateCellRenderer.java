@@ -26,7 +26,7 @@ public class DateCellRenderer extends DefaultTableCellRenderer {
     /**
      * The date format.
      */
-    private DateFormat dateFormat;
+    private final DateFormat dateFormat;
 
     /**
      * Construct an instance of the renderer for table cells containing dates.

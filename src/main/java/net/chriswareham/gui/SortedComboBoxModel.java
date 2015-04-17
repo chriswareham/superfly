@@ -31,7 +31,7 @@ public class SortedComboBoxModel<T extends Comparable<? super T>> extends Abstra
     /**
      * The list of rows that make up the model.
      */
-    private List<T> rows = new ArrayList<>();
+    private final List<T> rows = new ArrayList<>();
     /**
      * The selected row index.
      */

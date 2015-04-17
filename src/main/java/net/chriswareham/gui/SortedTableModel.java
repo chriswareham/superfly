@@ -30,7 +30,9 @@ public abstract class SortedTableModel<T extends Comparable<? super T>> extends 
     private final List<T> rows = new ArrayList<>();
 
     /**
-     * {@inheritDoc}
+     * Get whether there are no rows in the model.
+     *
+     * @return whether there are no rows in the model
      */
     @Override
     public boolean isRowsEmpty() {
