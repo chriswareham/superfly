@@ -307,7 +307,7 @@ public class ComponentParameters implements Serializable {
      */
     public void addListReference(final String name, final String reference) {
         if (!listReferences.containsKey(name)) {
-            listReferences.put(name, new ArrayList<String>());
+            listReferences.put(name, new ArrayList<>());
         }
         listReferences.get(name).add(reference);
     }
@@ -349,7 +349,7 @@ public class ComponentParameters implements Serializable {
      */
     public void addListProperty(final String name, final String property) {
         if (!listProperties.containsKey(name)) {
-            listProperties.put(name, new ArrayList<String>());
+            listProperties.put(name, new ArrayList<>());
         }
         listProperties.get(name).add(property);
     }
@@ -392,7 +392,7 @@ public class ComponentParameters implements Serializable {
      */
     public void addMapReference(final String name, final String key, final String value) {
         if (!mapReferences.containsKey(name)) {
-            mapReferences.put(name, new LinkedHashMap<String, String>());
+            mapReferences.put(name, new LinkedHashMap<>());
         }
         Map<String, String> values = mapReferences.get(name);
         values.put(key, value);
@@ -436,7 +436,7 @@ public class ComponentParameters implements Serializable {
      */
     public void addMapProperty(final String name, final String key, final String value) {
         if (!mapProperties.containsKey(name)) {
-            mapProperties.put(name, new LinkedHashMap<String, String>());
+            mapProperties.put(name, new LinkedHashMap<>());
         }
         Map<String, String> values = mapProperties.get(name);
         values.put(key, value);

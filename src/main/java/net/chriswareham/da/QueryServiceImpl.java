@@ -627,7 +627,7 @@ public class QueryServiceImpl implements QueryService {
          * @param c the wrapped data source connection
          * @param t whether the connection is to be used for a transaction
          */
-        public QueryConnectionImpl(final Connection c, final boolean t) {
+        private QueryConnectionImpl(final Connection c, final boolean t) {
             connection = c;
             transaction = t;
         }

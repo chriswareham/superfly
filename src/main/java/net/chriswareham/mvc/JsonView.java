@@ -87,7 +87,7 @@ public class JsonView implements View {
                 if (models.containsKey(modelName)) {
                     Object model = models.get(modelName);
                     if (model instanceof Collection<?>) {
-                        obj.put(modelName, new JSONArray((Collection<?>) model));
+                        obj.put(modelName, new JSONArray(model));
                     } else if (model instanceof Map<?, ?>) {
                         obj.put(modelName, model);
                     } else if (model instanceof String) {

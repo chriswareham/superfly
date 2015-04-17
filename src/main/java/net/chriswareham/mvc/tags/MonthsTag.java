@@ -45,7 +45,7 @@ public class MonthsTag extends LoopTagSupport {
      * @param d the starting date to iterate the months from
      */
     public void setStart(final Date d) {
-        start = d;
+        start = new Date(d.getTime());
     }
 
     /**

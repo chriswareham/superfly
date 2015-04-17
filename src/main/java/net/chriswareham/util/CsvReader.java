@@ -91,7 +91,7 @@ public class CsvReader implements Closeable {
      * @throws IOException if an error occurs
      */
     public List<String> parseLine() throws IOException {
-        return parseLine(new ArrayList<String>());
+        return parseLine(new ArrayList<>());
     }
 
     /**
