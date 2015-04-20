@@ -115,7 +115,7 @@ public class XmlDialog extends JDialog {
             parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (IOException | SAXException exception) {
             parent.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            ErrorDialog.showDialog(parent, "Error", exception);
+            ErrorDialog.showDialog(parent, "Error", "Error displaying XML", exception);
             dispose();
         }
     }
