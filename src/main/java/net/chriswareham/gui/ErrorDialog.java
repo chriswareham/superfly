@@ -35,45 +35,6 @@ public class ErrorDialog extends JDialog {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Show an instance of the error dialog. Does not return to the caller until
-     * the dialog is dismissed.
-     *
-     * @param title the title
-     * @param exception the exception to extract the message and details from
-     */
-    public static void showDialog(final String title, final Exception exception) {
-        ErrorDialog dialog = new ErrorDialog(title, exception);
-        dialog.setVisible(true);
-    }
-
-    /**
-     * Show an instance of the error dialog. Does not return to the caller until
-     * the dialog is dismissed.
-     *
-     * @param parent the parent window
-     * @param title the title
-     * @param exception the exception to extract the message and details from
-     */
-    public static void showDialog(final Window parent, final String title, final Exception exception) {
-        ErrorDialog dialog = new ErrorDialog(parent, title, exception);
-        dialog.setVisible(true);
-    }
-
-    /**
-     * Show an instance of the error dialog. Does not return to the caller until
-     * the dialog is dismissed.
-     *
-     * @param parent the parent window
-     * @param title the title
-     * @param message the message
-     * @param exception the exception to extract the message and details from
-     */
-    public static void showDialog(final Window parent, final String title, final String message, final Exception exception) {
-        ErrorDialog dialog = new ErrorDialog(parent, title, message, exception);
-        dialog.setVisible(true);
-    }
-
-    /**
      * The details button.
      */
     private JButton detailsButton;
@@ -134,6 +95,45 @@ public class ErrorDialog extends JDialog {
     public ErrorDialog(final Window parent, final String title, final String message, final String details) {
         super(parent, title, DEFAULT_MODALITY_TYPE);
         createInterface(parent, message, details);
+    }
+
+    /**
+     * Show an instance of the error dialog. Does not return to the caller until
+     * the dialog is dismissed.
+     *
+     * @param title the title
+     * @param exception the exception to extract the message and details from
+     */
+    public static void showDialog(final String title, final Exception exception) {
+        ErrorDialog dialog = new ErrorDialog(title, exception);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Show an instance of the error dialog. Does not return to the caller until
+     * the dialog is dismissed.
+     *
+     * @param parent the parent window
+     * @param title the title
+     * @param exception the exception to extract the message and details from
+     */
+    public static void showDialog(final Window parent, final String title, final Exception exception) {
+        ErrorDialog dialog = new ErrorDialog(parent, title, exception);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Show an instance of the error dialog. Does not return to the caller until
+     * the dialog is dismissed.
+     *
+     * @param parent the parent window
+     * @param title the title
+     * @param message the message
+     * @param exception the exception to extract the message and details from
+     */
+    public static void showDialog(final Window parent, final String title, final String message, final Exception exception) {
+        ErrorDialog dialog = new ErrorDialog(parent, title, message, exception);
+        dialog.setVisible(true);
     }
 
     /**

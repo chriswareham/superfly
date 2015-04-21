@@ -15,8 +15,8 @@ import java.util.List;
  * This class provides a table model that maintains the natural ordering of
  * rows.
  *
- * @param <T> type of the objects that make up the rows of the model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the model
  */
 public abstract class SortedTableModel<T extends Comparable<? super T>> extends BaseTableModel {
     /**

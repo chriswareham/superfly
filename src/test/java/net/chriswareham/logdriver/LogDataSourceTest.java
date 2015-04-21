@@ -7,11 +7,13 @@
 package net.chriswareham.logdriver;
 
 import java.sql.Connection;
+
 import javax.sql.DataSource;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.Mockito;
 
 /**

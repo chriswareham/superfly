@@ -180,11 +180,32 @@ public class LogConnection implements Connection {
      * {@inheritDoc}
      */
     @Override
-    public void commit() throws SQLException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Committing connection: " + connection);
-        }
-        connection.commit();
+    public Savepoint setSavepoint() throws SQLException {
+        return connection.setSavepoint();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Savepoint setSavepoint(final String name) throws SQLException {
+        return connection.setSavepoint(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void releaseSavepoint(final Savepoint savepoint) throws SQLException {
+        connection.releaseSavepoint(savepoint);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void rollback(final Savepoint savepoint) throws SQLException {
+        connection.rollback(savepoint);
     }
 
     /**
@@ -196,6 +217,17 @@ public class LogConnection implements Connection {
             LOGGER.debug("Rolling back connection: " + connection);
         }
         connection.rollback();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void commit() throws SQLException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Committing connection: " + connection);
+        }
+        connection.commit();
     }
 
     /**
@@ -319,38 +351,6 @@ public class LogConnection implements Connection {
     @Override
     public int getHoldability() throws SQLException {
         return connection.getHoldability();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Savepoint setSavepoint() throws SQLException {
-        return connection.setSavepoint();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Savepoint setSavepoint(final String name) throws SQLException {
-        return connection.setSavepoint(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void rollback(final Savepoint savepoint) throws SQLException {
-        connection.rollback(savepoint);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void releaseSavepoint(final Savepoint savepoint) throws SQLException {
-        connection.releaseSavepoint(savepoint);
     }
 
     /**

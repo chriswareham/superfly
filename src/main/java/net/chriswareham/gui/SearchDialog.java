@@ -205,7 +205,7 @@ public class SearchDialog extends JDialog {
     /**
      * Table model row.
      */
-    private static class SearchTableRow {
+    private static final class SearchTableRow {
         /** The table column name. */
         private final String name;
         /** The table column index. */
@@ -266,7 +266,7 @@ public class SearchDialog extends JDialog {
     /**
      * Search table model.
      */
-    private static class SearchTableModel extends DefaultTableModel<SearchTableRow> {
+    private static final class SearchTableModel extends DefaultTableModel<SearchTableRow> {
         /**
          * The serial version UID.
          */

@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * This interface is implemented by classes that handle stored procedure
  * callbacks.
  *
- * @param <T> the return type of the callback
  * @author Chris Wareham
+ * @param <T> the return type of the callback
  */
 public interface CallCallback<T> {
     /**

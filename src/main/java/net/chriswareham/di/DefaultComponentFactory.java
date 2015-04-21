@@ -332,7 +332,7 @@ public class DefaultComponentFactory implements ComponentFactory, LifecycleCompo
 
         try {
             Class<?> type = parameters.getType();
-    
+
             List<ConstructorArg> args = parameters.getConstructorArgs();
             if (args.isEmpty()) {
                 component = type.getConstructor().newInstance();
@@ -366,7 +366,7 @@ public class DefaultComponentFactory implements ComponentFactory, LifecycleCompo
      * @param args the component arguments
      * @return whether the constructor matches the component arguments
      */
-    private boolean matches(Constructor<?> constructor, List<ConstructorArg> args) {
+    private boolean matches(final Constructor<?> constructor, final List<ConstructorArg> args) {
         Class<?>[] types = constructor.getParameterTypes();
         if (types.length != args.size()) {
             return false;

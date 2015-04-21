@@ -94,10 +94,7 @@ public final class Postcodes {
      */
     public static String parseShortOutcode(final String code) {
         Matcher matcher = SHORT_OUTCODE_PATTERN.matcher(code);
-        if (matcher.matches()) {
-            return matcher.group(1);
-        }
-        return "";
+        return matcher.matches() ? matcher.group(1) : "";
     }
 
     /**
@@ -109,10 +106,7 @@ public final class Postcodes {
      */
     public static String parseLongOutcode(final String code) {
         Matcher matcher = LONG_OUTCODE_PATTERN.matcher(code);
-        if (matcher.matches()) {
-            return matcher.group(1);
-        }
-        return "";
+        return matcher.matches() ? matcher.group(1) : "";
     }
 
     /**
@@ -127,9 +121,6 @@ public final class Postcodes {
             return code;
         }
         Matcher matcher = NORMALISE_PATTERN.matcher(code);
-        if (matcher.matches()) {
-            return matcher.group(1) + ' ' + matcher.group(2);
-        }
-        return null;
+        return matcher.matches() ? matcher.group(1) + ' ' + matcher.group(2) : null;
     }
 }

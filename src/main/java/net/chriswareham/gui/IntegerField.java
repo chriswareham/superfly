@@ -108,7 +108,7 @@ public class IntegerField extends JTextField {
      * This class provides a document that enforces a maximum length and a valid
      * integer.
      */
-    private static class IntegerDocument extends PlainDocument {
+    private static final class IntegerDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

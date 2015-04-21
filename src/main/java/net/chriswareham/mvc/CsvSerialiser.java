@@ -12,8 +12,8 @@ import java.util.List;
  * This interface provides methods to be implemented by classes that serialise
  * an object to comma separated values.
  *
- * @param <T> the type of objects to serialise
  * @author Chris Wareham
+ * @param <T> the type of objects to serialise
  */
 public interface CsvSerialiser<T> {
     /**

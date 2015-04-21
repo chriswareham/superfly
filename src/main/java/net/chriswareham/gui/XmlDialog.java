@@ -131,7 +131,7 @@ public class XmlDialog extends JDialog {
     /**
      * This class provides a handler for parsing XML into a TreeModel.
      */
-    private static class Handler extends DefaultHandler {
+    private static final class Handler extends DefaultHandler {
         /**
          * The buffer for capturing data.
          */

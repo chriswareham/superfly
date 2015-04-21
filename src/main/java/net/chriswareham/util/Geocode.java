@@ -26,6 +26,36 @@ public final class Geocode implements Externalizable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * The WGS84 latitude of the geocode.
+     */
+    private double latitude;
+    /**
+     * The WGS84 longitude of the geocode.
+     */
+    private double longitude;
+    /**
+     * The Ordnance Survey easting of the geocode.
+     */
+    private double x;
+    /**
+     * The Ordnance Survey northing of the geocode.
+     */
+    private double y;
+
+    /**
+     * Constructs a new instance of the Geocode class.
+     *
+     * @param latLng the WGS84 latitude and longitude
+     * @param osRef the x and y Ordnance Survey easting and northing
+     */
+    private Geocode(final LatLng latLng, final OSRef osRef) {
+        latitude = latLng.getLat();
+        longitude = latLng.getLng();
+        x = osRef.getEasting();
+        y = osRef.getNorthing();
+    }
+
+    /**
      * Calculate a geocode from WGS84 latitude and longitude.
      *
      * @param latitude the WGS84 latitude
@@ -50,28 +80,6 @@ public final class Geocode implements Externalizable {
         LatLng latLng = osRef.toLatLng();
         latLng.toWGS84();
         return new Geocode(latLng, osRef);
-    }
-
-    /** The WGS84 latitude of the geocode. */
-    private double latitude;
-    /** The WGS84 longitude of the geocode. */
-    private double longitude;
-    /** The Ordnance Survey easting of the geocode. */
-    private double x;
-    /** The Ordnance Survey northing of the geocode. */
-    private double y;
-
-    /**
-     * Constructs a new instance of the Geocode class.
-     *
-     * @param latLng the WGS84 latitude and longitude
-     * @param osRef the x and y Ordnance Survey easting and northing
-     */
-    private Geocode(final LatLng latLng, final OSRef osRef) {
-        latitude = latLng.getLat();
-        longitude = latLng.getLng();
-        x = osRef.getEasting();
-        y = osRef.getNorthing();
     }
 
     /**

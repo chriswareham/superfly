@@ -145,255 +145,6 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public String getString(final int parameterIndex) throws SQLException {
-        return statement.getString(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean getBoolean(final int parameterIndex) throws SQLException {
-        return statement.getBoolean(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public byte getByte(final int parameterIndex) throws SQLException {
-        return statement.getByte(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public short getShort(final int parameterIndex) throws SQLException {
-        return statement.getShort(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getInt(final int parameterIndex) throws SQLException {
-        return statement.getInt(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long getLong(final int parameterIndex) throws SQLException {
-        return statement.getLong(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public float getFloat(final int parameterIndex) throws SQLException {
-        return statement.getFloat(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getDouble(final int parameterIndex) throws SQLException {
-        return statement.getDouble(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public BigDecimal getBigDecimal(final int parameterIndex, final int scale) throws SQLException {
-        return statement.getBigDecimal(parameterIndex, scale);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public byte[] getBytes(final int parameterIndex) throws SQLException {
-        return statement.getBytes(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Date getDate(final int parameterIndex) throws SQLException {
-        return statement.getDate(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Time getTime(final int parameterIndex) throws SQLException {
-        return statement.getTime(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Timestamp getTimestamp(final int parameterIndex) throws SQLException {
-        return statement.getTimestamp(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getObject(final int parameterIndex) throws SQLException {
-        return statement.getObject(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BigDecimal getBigDecimal(final int parameterIndex) throws SQLException {
-        return statement.getBigDecimal(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getObject(final int parameterIndex, final Map<String, Class<?>> map) throws SQLException {
-        return statement.getObject(parameterIndex, map);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Ref getRef(final int parameterIndex) throws SQLException {
-        return statement.getRef(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Blob getBlob(final int parameterIndex) throws SQLException {
-        return statement.getBlob(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Clob getClob(final int parameterIndex) throws SQLException {
-        return statement.getClob(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Array getArray(final int parameterIndex) throws SQLException {
-        return statement.getArray(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Date getDate(final int parameterIndex, final Calendar cal) throws SQLException {
-        return statement.getDate(parameterIndex, cal);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Time getTime(final int parameterIndex, final Calendar cal) throws SQLException {
-        return statement.getTime(parameterIndex, cal);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Timestamp getTimestamp(final int parameterIndex, final Calendar cal) throws SQLException {
-        return statement.getTimestamp(parameterIndex, cal);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URL getURL(final int parameterIndex) throws SQLException {
-        return statement.getURL(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public RowId getRowId(final int parameterIndex) throws SQLException {
-        return statement.getRowId(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public NClob getNClob(final int parameterIndex) throws SQLException {
-        return statement.getNClob(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SQLXML getSQLXML(final int parameterIndex) throws SQLException {
-        return statement.getSQLXML(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getNString(final int parameterIndex) throws SQLException {
-        return statement.getNString(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reader getNCharacterStream(final int parameterIndex) throws SQLException {
-        return statement.getNCharacterStream(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reader getCharacterStream(final int parameterIndex) throws SQLException {
-        return statement.getCharacterStream(parameterIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T getObject(final int parameterIndex, final Class<T> type) throws SQLException {
-        return statement.getObject(parameterIndex, type);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void registerOutParameter(final String parameterName, final int sqlType) throws SQLException {
         statement.registerOutParameter(parameterName, sqlType);
         outParams.put(parameterName, new OutParam(sqlType));
@@ -421,8 +172,24 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public String getString(final int parameterIndex) throws SQLException {
+        return statement.getString(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getString(final String parameterName) throws SQLException {
         return statement.getString(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getBoolean(final int parameterIndex) throws SQLException {
+        return statement.getBoolean(parameterIndex);
     }
 
     /**
@@ -437,8 +204,24 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public byte getByte(final int parameterIndex) throws SQLException {
+        return statement.getByte(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public byte getByte(final String parameterName) throws SQLException {
         return statement.getByte(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public short getShort(final int parameterIndex) throws SQLException {
+        return statement.getShort(parameterIndex);
     }
 
     /**
@@ -453,6 +236,14 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public int getInt(final int parameterIndex) throws SQLException {
+        return statement.getInt(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getInt(final String parameterName) throws SQLException {
         return statement.getInt(parameterName);
     }
@@ -461,8 +252,24 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public long getLong(final int parameterIndex) throws SQLException {
+        return statement.getLong(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public long getLong(final String parameterName) throws SQLException {
         return statement.getLong(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getFloat(final int parameterIndex) throws SQLException {
+        return statement.getFloat(parameterIndex);
     }
 
     /**
@@ -485,40 +292,25 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public byte[] getBytes(final String parameterName) throws SQLException {
-        return statement.getBytes(parameterName);
+    public double getDouble(final int parameterIndex) throws SQLException {
+        return statement.getDouble(parameterIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Date getDate(final String parameterName) throws SQLException {
-        return statement.getDate(parameterName);
+    @Deprecated
+    public BigDecimal getBigDecimal(final int parameterIndex, final int scale) throws SQLException {
+        return statement.getBigDecimal(parameterIndex, scale);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Time getTime(final String parameterName) throws SQLException {
-        return statement.getTime(parameterName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Timestamp getTimestamp(final String parameterName) throws SQLException {
-        return statement.getTimestamp(parameterName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getObject(final String parameterName) throws SQLException {
-        return statement.getObject(parameterName);
+    public BigDecimal getBigDecimal(final int parameterIndex) throws SQLException {
+        return statement.getBigDecimal(parameterIndex);
     }
 
     /**
@@ -533,40 +325,32 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public Object getObject(final String parameterName, final Map<String, Class<?>> map) throws SQLException {
-        return statement.getObject(parameterName, map);
+    public byte[] getBytes(final int parameterIndex) throws SQLException {
+        return statement.getBytes(parameterIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Ref getRef(final String parameterName) throws SQLException {
-        return statement.getRef(parameterName);
+    public byte[] getBytes(final String parameterName) throws SQLException {
+        return statement.getBytes(parameterName);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Blob getBlob(final String parameterName) throws SQLException {
-        return statement.getBlob(parameterName);
+    public Date getDate(final int parameterIndex, final Calendar cal) throws SQLException {
+        return statement.getDate(parameterIndex, cal);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Clob getClob(final String parameterName) throws SQLException {
-        return statement.getClob(parameterName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Array getArray(final String parameterName) throws SQLException {
-        return statement.getArray(parameterName);
+    public Date getDate(final int parameterIndex) throws SQLException {
+        return statement.getDate(parameterIndex);
     }
 
     /**
@@ -581,8 +365,56 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public Date getDate(final String parameterName) throws SQLException {
+        return statement.getDate(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Time getTime(final int parameterIndex, final Calendar cal) throws SQLException {
+        return statement.getTime(parameterIndex, cal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Time getTime(final int parameterIndex) throws SQLException {
+        return statement.getTime(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Time getTime(final String parameterName, final Calendar cal) throws SQLException {
         return statement.getTime(parameterName, cal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Time getTime(final String parameterName) throws SQLException {
+        return statement.getTime(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Timestamp getTimestamp(final int parameterIndex, final Calendar cal) throws SQLException {
+        return statement.getTimestamp(parameterIndex, cal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Timestamp getTimestamp(final int parameterIndex) throws SQLException {
+        return statement.getTimestamp(parameterIndex);
     }
 
     /**
@@ -597,57 +429,40 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public URL getURL(final String parameterName) throws SQLException {
-        return statement.getURL(parameterName);
+    public Timestamp getTimestamp(final String parameterName) throws SQLException {
+        return statement.getTimestamp(parameterName);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public RowId getRowId(final String parameterName) throws SQLException {
-        return statement.getRowId(parameterName);
+    public Object getObject(final int parameterIndex) throws SQLException {
+        return statement.getObject(parameterIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public NClob getNClob(final String parameterName) throws SQLException {
-        return statement.getNClob(parameterName);
+    public <T> T getObject(final int parameterIndex, final Class<T> type) throws SQLException {
+        return statement.getObject(parameterIndex, type);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SQLXML getSQLXML(final String parameterName) throws SQLException {
-        return statement.getSQLXML(parameterName);
+    public Object getObject(final int parameterIndex, final Map<String, Class<?>> map) throws SQLException {
+        return statement.getObject(parameterIndex, map);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getNString(final String parameterName) throws SQLException {
-        return statement.getNString(parameterName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reader getNCharacterStream(final String parameterName) throws SQLException {
-        return statement.getNCharacterStream(parameterName);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reader getCharacterStream(final String parameterName) throws SQLException {
-        return statement.getCharacterStream(parameterName);
+    public Object getObject(final String parameterName) throws SQLException {
+        return statement.getObject(parameterName);
     }
 
     /**
@@ -662,8 +477,201 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public Object getObject(final String parameterName, final Map<String, Class<?>> map) throws SQLException {
+        return statement.getObject(parameterName, map);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Ref getRef(final int parameterIndex) throws SQLException {
+        return statement.getRef(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Ref getRef(final String parameterName) throws SQLException {
+        return statement.getRef(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Blob getBlob(final int parameterIndex) throws SQLException {
+        return statement.getBlob(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Blob getBlob(final String parameterName) throws SQLException {
+        return statement.getBlob(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Clob getClob(final int parameterIndex) throws SQLException {
+        return statement.getClob(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Clob getClob(final String parameterName) throws SQLException {
+        return statement.getClob(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Array getArray(final int parameterIndex) throws SQLException {
+        return statement.getArray(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Array getArray(final String parameterName) throws SQLException {
+        return statement.getArray(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URL getURL(final int parameterIndex) throws SQLException {
+        return statement.getURL(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URL getURL(final String parameterName) throws SQLException {
+        return statement.getURL(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RowId getRowId(final int parameterIndex) throws SQLException {
+        return statement.getRowId(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RowId getRowId(final String parameterName) throws SQLException {
+        return statement.getRowId(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NClob getNClob(final int parameterIndex) throws SQLException {
+        return statement.getNClob(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NClob getNClob(final String parameterName) throws SQLException {
+        return statement.getNClob(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SQLXML getSQLXML(final int parameterIndex) throws SQLException {
+        return statement.getSQLXML(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SQLXML getSQLXML(final String parameterName) throws SQLException {
+        return statement.getSQLXML(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getNString(final int parameterIndex) throws SQLException {
+        return statement.getNString(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getNString(final String parameterName) throws SQLException {
+        return statement.getNString(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Reader getNCharacterStream(final int parameterIndex) throws SQLException {
+        return statement.getNCharacterStream(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Reader getNCharacterStream(final String parameterName) throws SQLException {
+        return statement.getNCharacterStream(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Reader getCharacterStream(final int parameterIndex) throws SQLException {
+        return statement.getCharacterStream(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Reader getCharacterStream(final String parameterName) throws SQLException {
+        return statement.getCharacterStream(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setNull(final String parameterName, final int sqlType) throws SQLException {
         statement.setNull(parameterName, sqlType);
+        bindParams.put(parameterName, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNull(final String parameterName, final int sqlType, final String typeName) throws SQLException {
+        statement.setNull(parameterName, sqlType, typeName);
         bindParams.put(parameterName, null);
     }
 
@@ -761,8 +769,26 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public void setDate(final String parameterName, final Date x, final Calendar cal) throws SQLException {
+        statement.setDate(parameterName, x, cal);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setDate(final String parameterName, final Date x) throws SQLException {
         statement.setDate(parameterName, x);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTime(final String parameterName, final Time x, final Calendar cal) throws SQLException {
+        statement.setTime(parameterName, x, cal);
         bindParams.put(parameterName, x);
     }
 
@@ -779,8 +805,26 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public void setTimestamp(final String parameterName, final Timestamp x, final Calendar cal) throws SQLException {
+        statement.setTimestamp(parameterName, x, cal);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setTimestamp(final String parameterName, final Timestamp x) throws SQLException {
         statement.setTimestamp(parameterName, x);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAsciiStream(final String parameterName, final InputStream x, final long length) throws SQLException {
+        statement.setAsciiStream(parameterName, x, length);
         bindParams.put(parameterName, x);
     }
 
@@ -797,8 +841,35 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public void setAsciiStream(final String parameterName, final InputStream x) throws SQLException {
+        statement.setAsciiStream(parameterName, x);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBinaryStream(final String parameterName, final InputStream x, final long length) throws SQLException {
+        statement.setBinaryStream(parameterName, x, length);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setBinaryStream(final String parameterName, final InputStream x, final int length) throws SQLException {
         statement.setBinaryStream(parameterName, x, length);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBinaryStream(final String parameterName, final InputStream x) throws SQLException {
+        statement.setBinaryStream(parameterName, x);
         bindParams.put(parameterName, x);
     }
 
@@ -833,6 +904,15 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public void setCharacterStream(final String parameterName, final Reader reader, final long length) throws SQLException {
+        statement.setCharacterStream(parameterName, reader, length);
+        bindParams.put(parameterName, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setCharacterStream(final String parameterName, final Reader reader, final int length) throws SQLException {
         statement.setCharacterStream(parameterName, reader, length);
         bindParams.put(parameterName, reader);
@@ -842,27 +922,9 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public void setDate(final String parameterName, final Date x, final Calendar cal) throws SQLException {
-        statement.setDate(parameterName, x, cal);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTime(final String parameterName, final Time x, final Calendar cal) throws SQLException {
-        statement.setTime(parameterName, x, cal);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTimestamp(final String parameterName, final Timestamp x, final Calendar cal) throws SQLException {
-        statement.setTimestamp(parameterName, x, cal);
-        bindParams.put(parameterName, x);
+    public void setCharacterStream(final String parameterName, final Reader reader) throws SQLException {
+        statement.setCharacterStream(parameterName, reader);
+        bindParams.put(parameterName, reader);
     }
 
     /**
@@ -872,15 +934,6 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
     public void setURL(final String parameterName, final URL val) throws SQLException {
         statement.setURL(parameterName, val);
         bindParams.put(parameterName, val);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNull(final String parameterName, final int sqlType, final String typeName) throws SQLException {
-        statement.setNull(parameterName, sqlType, typeName);
-        bindParams.put(parameterName, null);
     }
 
     /**
@@ -913,6 +966,33 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
+    public void setNCharacterStream(final String parameterName, final Reader value) throws SQLException {
+        statement.setNCharacterStream(parameterName, value);
+        bindParams.put(parameterName, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNClob(final String parameterName, final Reader reader, final long length) throws SQLException {
+        statement.setNClob(parameterName, reader, length);
+        bindParams.put(parameterName, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNClob(final String parameterName, final Reader reader) throws SQLException {
+        statement.setNClob(parameterName, reader);
+        bindParams.put(parameterName, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setNClob(final String parameterName, final NClob value) throws SQLException {
         statement.setNClob(parameterName, value);
         bindParams.put(parameterName, value);
@@ -931,36 +1011,9 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public void setBlob(final String parameterName, final InputStream inputStream, final long length) throws SQLException {
-        statement.setBlob(parameterName, inputStream, length);
-        bindParams.put(parameterName, inputStream);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNClob(final String parameterName, final Reader reader, final long length) throws SQLException {
-        statement.setNClob(parameterName, reader, length);
+    public void setClob(final String parameterName, final Reader reader) throws SQLException {
+        statement.setClob(parameterName, reader);
         bindParams.put(parameterName, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSQLXML(final String parameterName, final SQLXML xmlObject) throws SQLException {
-        statement.setSQLXML(parameterName, xmlObject);
-        bindParams.put(parameterName, xmlObject);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBlob(final String parameterName, final Blob x) throws SQLException {
-        statement.setBlob(parameterName, x);
-        bindParams.put(parameterName, x);
     }
 
     /**
@@ -976,72 +1029,9 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public void setAsciiStream(final String parameterName, final InputStream x, final long length) throws SQLException {
-        statement.setAsciiStream(parameterName, x, length);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBinaryStream(final String parameterName, final InputStream x, final long length) throws SQLException {
-        statement.setBinaryStream(parameterName, x, length);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCharacterStream(final String parameterName, final Reader reader, final long length) throws SQLException {
-        statement.setCharacterStream(parameterName, reader, length);
-        bindParams.put(parameterName, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAsciiStream(final String parameterName, final InputStream x) throws SQLException {
-        statement.setAsciiStream(parameterName, x);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBinaryStream(final String parameterName, final InputStream x) throws SQLException {
-        statement.setBinaryStream(parameterName, x);
-        bindParams.put(parameterName, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCharacterStream(final String parameterName, final Reader reader) throws SQLException {
-        statement.setCharacterStream(parameterName, reader);
-        bindParams.put(parameterName, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNCharacterStream(final String parameterName, final Reader value) throws SQLException {
-        statement.setNCharacterStream(parameterName, value);
-        bindParams.put(parameterName, value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setClob(final String parameterName, final Reader reader) throws SQLException {
-        statement.setClob(parameterName, reader);
-        bindParams.put(parameterName, reader);
+    public void setBlob(final String parameterName, final InputStream inputStream, final long length) throws SQLException {
+        statement.setBlob(parameterName, inputStream, length);
+        bindParams.put(parameterName, inputStream);
     }
 
     /**
@@ -1057,9 +1047,18 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
      * {@inheritDoc}
      */
     @Override
-    public void setNClob(final String parameterName, final Reader reader) throws SQLException {
-        statement.setNClob(parameterName, reader);
-        bindParams.put(parameterName, reader);
+    public void setBlob(final String parameterName, final Blob x) throws SQLException {
+        statement.setBlob(parameterName, x);
+        bindParams.put(parameterName, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSQLXML(final String parameterName, final SQLXML xmlObject) throws SQLException {
+        statement.setSQLXML(parameterName, xmlObject);
+        bindParams.put(parameterName, xmlObject);
     }
 
     /**

@@ -294,6 +294,15 @@ public class LogStatement implements Statement {
      * {@inheritDoc}
      */
     @Override
+    public boolean getMoreResults(final int current) throws SQLException {
+        return statement.getMoreResults(current);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setFetchDirection(final int direction) throws SQLException {
         statement.setFetchDirection(direction);
     }
@@ -344,14 +353,6 @@ public class LogStatement implements Statement {
     @Override
     public Connection getConnection() throws SQLException {
         return connection;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean getMoreResults(final int current) throws SQLException {
-        return statement.getMoreResults(current);
     }
 
     /**

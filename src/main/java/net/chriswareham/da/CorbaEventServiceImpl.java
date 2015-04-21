@@ -256,35 +256,6 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
     }
 
     /**
-     * This class dispatches events to listeners.
-     */
-    private static class Supplier extends PushSupplierPOA {
-        /**
-         * The topic.
-         */
-        private final String topic;
-
-        /**
-         * Constructs a new instance of the consumer.
-         *
-         * @param t the topic
-         */
-        private Supplier(final String t) {
-            topic = t;
-        }
-
-        /**
-         * Called when the consumer is disconnected.
-         */
-        @Override
-        public void disconnect_push_supplier() {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Supplier disconnected for topic " + topic);
-            }
-        }
-    }
-
-    /**
      * Encode an event to a string.
      *
      * @param event the event to encode
@@ -314,12 +285,41 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
         } catch (IOException | ClassNotFoundException | ClassCastException exception) {
             return null;
         }
-   }
+    }
 
     /**
      * This class dispatches events to listeners.
      */
-    private static class Consumer extends PushConsumerPOA {
+    private static final class Supplier extends PushSupplierPOA {
+        /**
+         * The topic.
+         */
+        private final String topic;
+
+        /**
+         * Constructs a new instance of the consumer.
+         *
+         * @param t the topic
+         */
+        private Supplier(final String t) {
+            topic = t;
+        }
+
+        /**
+         * Called when the consumer is disconnected.
+         */
+        @Override
+        public void disconnect_push_supplier() {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Supplier disconnected for topic " + topic);
+            }
+        }
+    }
+
+    /**
+     * This class dispatches events to listeners.
+     */
+    private static final class Consumer extends PushConsumerPOA {
         /**
          * The topic.
          */
@@ -342,6 +342,11 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
             topic = t;
         }
 
+        /**
+         * Add a topic listener.
+         *
+         * @param listener the topic listener to add
+         */
         public void addListener(final TopicListener listener) {
             try {
                 lock.writeLock().lock();
@@ -351,6 +356,11 @@ public class CorbaEventServiceImpl implements EventService, LifecycleComponent {
             }
         }
 
+        /**
+         * Remove a topic listener.
+         *
+         * @param listener the topic listener to remove
+         */
         public void removeListener(final TopicListener listener) {
             try {
                 lock.writeLock().lock();

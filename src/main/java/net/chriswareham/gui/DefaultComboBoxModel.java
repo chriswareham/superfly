@@ -17,8 +17,8 @@ import javax.swing.ComboBoxModel;
 /**
  * This class provides a default combo box model.
  *
- * @param <T> type of the objects that make up the rows of the model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the model
  */
 public class DefaultComboBoxModel<T> extends AbstractListModel<T> implements ComboBoxModel<T> {
     /**

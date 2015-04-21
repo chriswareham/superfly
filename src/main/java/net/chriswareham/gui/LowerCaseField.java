@@ -85,7 +85,7 @@ public class LowerCaseField extends JTextField {
      * This class provides a document that enforces a maximum length and lower
      * case characters.
      */
-    private static class LowerCaseDocument extends PlainDocument {
+    private static final class LowerCaseDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

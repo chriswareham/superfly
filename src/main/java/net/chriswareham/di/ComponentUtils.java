@@ -354,9 +354,8 @@ public final class ComponentUtils {
      * @param type the boxed primitive type
      * @param value the string value
      * @return a boxed primitive type
-     * @throws IllegalArgumentException if the type or value are unsupported
      */
-    public static Object valueOf(final Class<?> type, final String value) throws IllegalArgumentException {
+    public static Object valueOf(final Class<?> type, final String value) {
         if (type == String.class) {
             return value;
         }

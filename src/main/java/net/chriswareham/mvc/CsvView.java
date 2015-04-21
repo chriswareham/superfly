@@ -24,8 +24,8 @@ import net.chriswareham.util.CsvWriter;
 /**
  * This class provides a view that renders models as comma separated values.
  *
- * @param <T> the type of objects to serialise
  * @author Chris Wareham
+ * @param <T> the type of objects to serialise
  */
 public class CsvView<T> implements View {
     /**

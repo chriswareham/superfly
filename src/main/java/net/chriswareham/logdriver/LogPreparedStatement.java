@@ -125,6 +125,15 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setNull(final int parameterIndex, final int sqlType, final String typeName) throws SQLException {
+        statement.setNull(parameterIndex, sqlType, typeName);
+        bindParams.put(parameterIndex, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setNull(final int parameterIndex, final int sqlType) throws SQLException {
         statement.setNull(parameterIndex, sqlType);
         bindParams.put(parameterIndex, null);
@@ -224,6 +233,15 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setDate(final int parameterIndex, final Date x, final Calendar cal) throws SQLException {
+        statement.setDate(parameterIndex, x, cal);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setDate(final int parameterIndex, final Date x) throws SQLException {
         statement.setDate(parameterIndex, x);
         bindParams.put(parameterIndex, x);
@@ -233,8 +251,26 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setTime(final int parameterIndex, final Time x, final Calendar cal) throws SQLException {
+        statement.setTime(parameterIndex, x, cal);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setTime(final int parameterIndex, final Time x) throws SQLException {
         statement.setTime(parameterIndex, x);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTimestamp(final int parameterIndex, final Timestamp x, final Calendar cal) throws SQLException {
+        statement.setTimestamp(parameterIndex, x, cal);
         bindParams.put(parameterIndex, x);
     }
 
@@ -253,6 +289,24 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
     @Override
     public void setAsciiStream(final int parameterIndex, final InputStream x, final long length) throws SQLException {
         statement.setAsciiStream(parameterIndex, x, length);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAsciiStream(final int parameterIndex, final InputStream x, final int length) throws SQLException {
+        statement.setAsciiStream(parameterIndex, x, length);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAsciiStream(final int parameterIndex, final InputStream x) throws SQLException {
+        statement.setAsciiStream(parameterIndex, x);
         bindParams.put(parameterIndex, x);
     }
 
@@ -279,6 +333,33 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setBinaryStream(final int parameterIndex, final InputStream x, final int length) throws SQLException {
+        statement.setBinaryStream(parameterIndex, x, length);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBinaryStream(final int parameterIndex, final InputStream x) throws SQLException {
+        statement.setBinaryStream(parameterIndex, x);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setObject(final int parameterIndex, final Object x, final int targetSqlType, final int scaleOrLength) throws SQLException {
+        statement.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setObject(final int parameterIndex, final Object x, final int targetSqlType) throws SQLException {
         statement.setObject(parameterIndex, x, targetSqlType);
         bindParams.put(parameterIndex, x);
@@ -297,8 +378,26 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setCharacterStream(final int parameterIndex, final Reader reader, final long length) throws SQLException {
+        statement.setCharacterStream(parameterIndex, reader, length);
+        bindParams.put(parameterIndex, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setCharacterStream(final int parameterIndex, final Reader reader, final int length) throws SQLException {
         statement.setCharacterStream(parameterIndex, reader, length);
+        bindParams.put(parameterIndex, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCharacterStream(final int parameterIndex, final Reader reader) throws SQLException {
+        statement.setCharacterStream(parameterIndex, reader);
         bindParams.put(parameterIndex, reader);
     }
 
@@ -315,63 +414,9 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
-    public void setBlob(final int parameterIndex, final Blob x) throws SQLException {
-        statement.setBlob(parameterIndex, x);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setClob(final int parameterIndex, final Clob x) throws SQLException {
-        statement.setClob(parameterIndex, x);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setArray(final int parameterIndex, final Array x) throws SQLException {
         statement.setArray(parameterIndex, x);
         bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDate(final int parameterIndex, final Date x, final Calendar cal) throws SQLException {
-        statement.setDate(parameterIndex, x, cal);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTime(final int parameterIndex, final Time x, final Calendar cal) throws SQLException {
-        statement.setTime(parameterIndex, x, cal);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTimestamp(final int parameterIndex, final Timestamp x, final Calendar cal) throws SQLException {
-        statement.setTimestamp(parameterIndex, x, cal);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNull(final int parameterIndex, final int sqlType, final String typeName) throws SQLException {
-        statement.setNull(parameterIndex, sqlType, typeName);
-        bindParams.put(parameterIndex, null);
     }
 
     /**
@@ -414,9 +459,18 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
-    public void setNClob(final int parameterIndex, final NClob value) throws SQLException {
-        statement.setNClob(parameterIndex, value);
+    public void setNCharacterStream(final int parameterIndex, final Reader value) throws SQLException {
+        statement.setNCharacterStream(parameterIndex, value);
         bindParams.put(parameterIndex, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setClob(final int parameterIndex, final Clob x) throws SQLException {
+        statement.setClob(parameterIndex, x);
+        bindParams.put(parameterIndex, x);
     }
 
     /**
@@ -432,108 +486,27 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
-    public void setBlob(final int parameterIndex, final InputStream inputStream, final long length) throws SQLException {
-        statement.setBlob(parameterIndex, inputStream, length);
-        bindParams.put(parameterIndex, inputStream);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNClob(final int parameterIndex, final Reader reader, final long length) throws SQLException {
-        statement.setNClob(parameterIndex, reader, length);
-        bindParams.put(parameterIndex, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSQLXML(final int parameterIndex, final SQLXML xmlObject) throws SQLException {
-        statement.setSQLXML(parameterIndex, xmlObject);
-        bindParams.put(parameterIndex, xmlObject);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setObject(final int parameterIndex, final Object x, final int targetSqlType, final int scaleOrLength) throws SQLException {
-        statement.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAsciiStream(final int parameterIndex, final InputStream x, final int length) throws SQLException {
-        statement.setAsciiStream(parameterIndex, x, length);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBinaryStream(final int parameterIndex, final InputStream x, final int length) throws SQLException {
-        statement.setBinaryStream(parameterIndex, x, length);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCharacterStream(final int parameterIndex, final Reader reader, final long length) throws SQLException {
-        statement.setCharacterStream(parameterIndex, reader, length);
-        bindParams.put(parameterIndex, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAsciiStream(final int parameterIndex, final InputStream x) throws SQLException {
-        statement.setAsciiStream(parameterIndex, x);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBinaryStream(final int parameterIndex, final InputStream x) throws SQLException {
-        statement.setBinaryStream(parameterIndex, x);
-        bindParams.put(parameterIndex, x);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCharacterStream(final int parameterIndex, final Reader reader) throws SQLException {
-        statement.setCharacterStream(parameterIndex, reader);
-        bindParams.put(parameterIndex, reader);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setNCharacterStream(final int parameterIndex, final Reader value) throws SQLException {
-        statement.setNCharacterStream(parameterIndex, value);
-        bindParams.put(parameterIndex, value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setClob(final int parameterIndex, final Reader reader) throws SQLException {
         statement.setClob(parameterIndex, reader);
         bindParams.put(parameterIndex, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBlob(final int parameterIndex, final Blob x) throws SQLException {
+        statement.setBlob(parameterIndex, x);
+        bindParams.put(parameterIndex, x);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBlob(final int parameterIndex, final InputStream inputStream, final long length) throws SQLException {
+        statement.setBlob(parameterIndex, inputStream, length);
+        bindParams.put(parameterIndex, inputStream);
     }
 
     /**
@@ -549,9 +522,36 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
      * {@inheritDoc}
      */
     @Override
+    public void setNClob(final int parameterIndex, final NClob value) throws SQLException {
+        statement.setNClob(parameterIndex, value);
+        bindParams.put(parameterIndex, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNClob(final int parameterIndex, final Reader reader, final long length) throws SQLException {
+        statement.setNClob(parameterIndex, reader, length);
+        bindParams.put(parameterIndex, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setNClob(final int parameterIndex, final Reader reader) throws SQLException {
         statement.setNClob(parameterIndex, reader);
         bindParams.put(parameterIndex, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSQLXML(final int parameterIndex, final SQLXML xmlObject) throws SQLException {
+        statement.setSQLXML(parameterIndex, xmlObject);
+        bindParams.put(parameterIndex, xmlObject);
     }
 
     /**

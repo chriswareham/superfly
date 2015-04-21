@@ -52,6 +52,13 @@ public final class TypeConverter {
     }
 
     /**
+     * Private constructor to prevent instantiation of utility class.
+     */
+    private TypeConverter() {
+        // private constructor to prevent instantiation of utility class
+    }
+
+    /**
      * Get a string representation for an JDBC SQL type.
      *
      * @param type the JDBC SQL type
@@ -59,12 +66,5 @@ public final class TypeConverter {
      */
     public static String convert(final int type) {
         return TYPES.containsKey(type) ? TYPES.get(type) : "";
-    }
-
-    /**
-     * Private constructor to prevent instantiation of utility class.
-     */
-    private TypeConverter() {
-        // private constructor to prevent instantiation of utility class
     }
 }

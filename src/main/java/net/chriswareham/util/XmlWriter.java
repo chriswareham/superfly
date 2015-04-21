@@ -22,6 +22,23 @@ import java.util.Deque;
  */
 public class XmlWriter implements Closeable, Flushable {
     /**
+     * The tab character (ASCII decimal value).
+     */
+    public static final int TAB_CHARACTER = 9;
+    /**
+     * The line feed character (ASCII decimal value).
+     */
+    public static final int LF_CHARACTER = 10;
+    /**
+     * The carriage return character (ASCII decimal value).
+     */
+    public static final int CR_CHARACTER = 13;
+    /**
+     * The default encoding.
+     */
+    private static final String DEFAULT_ENCODING = "UTF-8";
+
+    /**
      * The writer states.
      */
     private static enum State {
@@ -38,23 +55,6 @@ public class XmlWriter implements Closeable, Flushable {
          */
         WRITING_ELEMENT
     }
-
-    /**
-     * The default encoding.
-     */
-    private static final String DEFAULT_ENCODING = "UTF-8";
-    /**
-     * The tab character (ASCII decimal value).
-     */
-    public static final int TAB_CHARACTER = 9;
-    /**
-     * The line feed character (ASCII decimal value).
-     */
-    public static final int LF_CHARACTER = 10;
-    /**
-     * The carriage return character (ASCII decimal value).
-     */
-    public static final int CR_CHARACTER = 13;
 
     /**
      * The writer state.

@@ -153,7 +153,7 @@ public class IdentifierField extends JTextField {
      * This class provides a document that enforces a maximum length and valid
      * identifier characters.
      */
-    private static class IdentifierDocument extends PlainDocument {
+    private static final class IdentifierDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

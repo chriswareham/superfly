@@ -599,7 +599,7 @@ public class QueryServiceImpl implements QueryService {
     /**
      * This class implements a data source connection wrapper.
      */
-    private static class QueryConnectionImpl implements QueryConnection {
+    private static final class QueryConnectionImpl implements QueryConnection {
         /**
          * The wrapped data source connection.
          */

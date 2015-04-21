@@ -11,8 +11,8 @@ import javax.swing.JComboBox;
 /**
  * This class provides a table column for a combo box model.
  *
- * @param <T> type of the objects that make up the rows of the combo box model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the combo box model
  */
 public class ComboTableColumn<T extends Comparable<? super T>> extends DefaultTableColumn {
     /**

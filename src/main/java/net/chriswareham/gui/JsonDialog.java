@@ -117,11 +117,16 @@ public class JsonDialog extends JDialog {
     }
 
     /**
-     * This class provides a handler for parsing JSON into a TreeModel.
+     * This class provides a handler for a tree model from JSON data.
      */
     private static class Handler {
-
-        public DefaultTreeModel parse(final String json) throws JSONException {
+        /**
+         * Parse a tree model from JSON data.
+         *
+         * @param json the JSON data
+         * @return a tree model
+         */
+        public DefaultTreeModel parse(final String json) {
             DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode();
 
             JSONObject obj = new JSONObject(json);
@@ -130,6 +135,12 @@ public class JsonDialog extends JDialog {
             return new DefaultTreeModel(treeNode);
         }
 
+        /**
+         * Parse a JSON object.
+         *
+         * @param parentNode the parent tree model node
+         * @param json the JSON data
+         */
         private void parse(final DefaultMutableTreeNode parentNode, final JSONObject json) {
             for (String name : json.keySet()) {
                 Object obj = json.get(name);
@@ -145,14 +156,20 @@ public class JsonDialog extends JDialog {
                     DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(name);
                     parentNode.add(treeNode);
                     parse(treeNode, (JSONObject) obj);
-                } else  {
+                } else {
                     DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(name + ": " + obj.toString());
                     parentNode.add(treeNode);
                 }
             }
          }
 
-       private void parse(final DefaultMutableTreeNode parentNode, final JSONArray json) {
+        /**
+         * Parse a JSON array.
+         *
+         * @param parentNode the parent tree model node
+         * @param json the JSON data
+         */
+        private void parse(final DefaultMutableTreeNode parentNode, final JSONArray json) {
             for (int i = 0; i < json.length(); ++i) {
                 Object obj = json.get(i);
 
@@ -163,7 +180,7 @@ public class JsonDialog extends JDialog {
                     parse(parentNode, (JSONArray) obj);
                 } else if (obj instanceof JSONObject) {
                     parse(parentNode, (JSONObject) obj);
-                } else  {
+                } else {
                     DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(obj.toString());
                     parentNode.add(treeNode);
                 }

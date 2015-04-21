@@ -108,7 +108,7 @@ public class DoubleField extends JTextField {
      * This class provides a document that enforces a maximum length and a valid
      * double.
      */
-    private static class DoubleDocument extends PlainDocument {
+    private static final class DoubleDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

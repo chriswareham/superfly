@@ -15,8 +15,8 @@ import javax.swing.JTable;
 /**
  * This class provides an editor for table cells containing combo boxes.
  *
- * @param <T> type of the objects that make up the rows of the combo box model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the combo box model
  */
 public class ComboCellEditor<T extends Comparable<? super T>> extends DefaultCellEditor {
     /**

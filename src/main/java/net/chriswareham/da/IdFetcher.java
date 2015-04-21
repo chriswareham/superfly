@@ -9,9 +9,9 @@ package net.chriswareham.da;
 /**
  * This interface is implemented by classes that fetch ids.
  *
+ * @author Chris Wareham
  * @param <I> the type of object that is an id
  * @param <T> the type of object to fetch an id from
- * @author Chris Wareham
  */
 public interface IdFetcher<I, T> {
     /**

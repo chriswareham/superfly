@@ -15,8 +15,8 @@ import javax.swing.AbstractListModel;
 /**
  * This class provides a default list model.
  *
- * @param <T> type of the objects that make up the rows of the model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the model
  */
 public class DefaultListModel<T extends Comparable<? super T>> extends AbstractListModel<T> {
     /**

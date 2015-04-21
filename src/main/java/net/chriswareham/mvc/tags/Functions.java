@@ -23,16 +23,16 @@ import net.chriswareham.util.Dates;
  */
 public final class Functions {
     /**
+     * The pattern for splitting strings.
+     */
+    private static final Pattern SPLIT_PATTERN = Pattern.compile("[\r\f\n]+");
+
+    /**
      * Utility class - no public constructor.
      */
     private Functions() {
         // empty
     }
-
-    /**
-     * The pattern for splitting strings.
-     */
-    private static final Pattern SPLIT_PATTERN = Pattern.compile("[\r\f\n]+");
 
     /**
      * Get whether a collection of strings contains a specific string.

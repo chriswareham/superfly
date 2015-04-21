@@ -19,8 +19,8 @@ import javax.swing.ComboBoxModel;
  * This class provides a combo box model that maintains the natural ordering of
  * rows.
  *
- * @param <T> type of the objects that make up the rows of the model
  * @author Chris Wareham
+ * @param <T> type of the objects that make up the rows of the model
  */
 public class SortedComboBoxModel<T extends Comparable<? super T>> extends AbstractListModel<T> implements ComboBoxModel<T> {
     /**

@@ -86,7 +86,7 @@ public class PostcodeField extends JTextField {
      * This class provides a document that enforces a maximum length and the
      * validity of postcode characters.
      */
-    private static class PostcodeDocument extends PlainDocument {
+    private static final class PostcodeDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

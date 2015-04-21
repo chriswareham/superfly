@@ -27,9 +27,9 @@ import net.chriswareham.di.LifecycleComponent;
  * It also provides an event listener which flushes objects on receipt of an
  * update or delete event.
  *
+ * @author Chris Wareham
  * @param <I> the type of object that is used to identify cached objects
  * @param <T> the type of cached objects
- * @author Chris Wareham
  */
 public class MemoryCache<I, T> implements Cache<I, T>, TopicListener, LifecycleComponent {
     /**

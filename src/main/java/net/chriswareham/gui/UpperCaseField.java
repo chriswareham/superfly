@@ -85,7 +85,7 @@ public class UpperCaseField extends JTextField {
      * This class provides a document that enforces a maximum length and upper
      * case characters.
      */
-    private static class UpperCaseDocument extends PlainDocument {
+    private static final class UpperCaseDocument extends PlainDocument {
         /**
          * The serial version UID.
          */

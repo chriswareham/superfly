@@ -108,14 +108,14 @@ public class DefaultTable extends JTable {
         int sr = getSelectedRow();
 
         for (int row = sr + 1; row < rc; ++row) {
-            if (search(row, string, cols, exact)) {
+            if (searchRow(row, string, cols, exact)) {
                 return true;
             }
         }
 
         if (sr > 0) {
             for (int row = 0; row < sr; ++row) {
-                if (search(row, string, cols, exact)) {
+                if (searchRow(row, string, cols, exact)) {
                     return true;
                 }
             }
@@ -205,7 +205,7 @@ public class DefaultTable extends JTable {
      * @param exact whether to search for an exact match
      * @return whether a match was found
      */
-    private boolean search(final int row, final String string, final List<Integer> cols, final boolean exact) {
+    private boolean searchRow(final int row, final String string, final List<Integer> cols, final boolean exact) {
         for (int col : cols) {
             String s = tableModel.getValueAt(row, col).toString();
             if ((exact && s.equals(string)) || (!exact && s.contains(string))) {

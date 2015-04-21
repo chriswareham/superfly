@@ -10,9 +10,9 @@ package net.chriswareham.da;
  * This interface is implemented by classes that support the storing and
  * fetching of objects from a cache.
  *
+ * @author Chris Wareham
  * @param <I> the type of object that is used to identify cached objects
  * @param <T> the type of cached objects
- * @author Chris Wareham
  */
 public interface Cache<I, T> {
     /**

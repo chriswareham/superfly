@@ -86,7 +86,7 @@ public class TelephoneField extends JTextField {
      * This class provides a document that enforces a maximum length and the
      * validity of telephone characters.
      */
-    private static class TelephoneDocument extends PlainDocument {
+    private static final class TelephoneDocument extends PlainDocument {
         /**
          * The serial version UID.
          */
