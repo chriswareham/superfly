@@ -81,7 +81,7 @@ public class JmsEventServiceImpl implements EventService, LifecycleComponent {
      */
     @Override
     public void removeTopicListener(final String topic, final TopicListener listener) {
-        if (!listeners.containsKey(topic)) {
+        if (listeners.containsKey(topic)) {
             listeners.get(topic).remove(listener);
         }
     }
