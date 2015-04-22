@@ -5,10 +5,35 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Superfly Framework</name>
     <groupId>net.chriswareham</groupId>
     <artifactId>superfly</artifactId>
     <version>1.0.0</version>
+
+    <name>Superfly Framework</name>
+    <description>Superfly is a lightweight framework.</description>
+    <url>https://github.com/chriswareham/superfly</url>
+
+    <licenses>
+        <license>
+            <name>BSD 2-Clause License</name>
+            <url>http://www.opensource.org/licenses/bsd-license.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Chris Wareham</name>
+            <email>chris@chriswareham.net</email>
+            <organization>Chris Wareham</organization>
+            <organizationUrl>http://www.chriswareham.net/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:chriswareham/superfly.git</connection>
+        <developerConnection>scm:git:git@github.com:chriswareham/superfly.git</developerConnection>
+        <url>git@github.com:chriswareham/superfly.git</url>
+    </scm>
 
     <properties>
         <encoding>UTF-8</encoding>
