@@ -26,10 +26,6 @@ public final class Dates {
      * The time zone of the host.
      */
     public static final TimeZone TIME_ZONE = TimeZone.getDefault();
-    /**
-     * The calendar instance.
-     */
-    private static final Calendar CALENDAR = Calendar.getInstance();
 
     /**
      * Utility class - no public constructor.
@@ -55,15 +51,7 @@ public final class Dates {
      * @return the date representing the start of the day
      */
     public static Date startDay(final Date date) {
-        Calendar calendar = CALENDAR;
-        synchronized (calendar) {
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            return calendar.getTime();
-        }
+        return startDay(Calendar.getInstance(), date);
     }
 
     /**
@@ -73,15 +61,7 @@ public final class Dates {
      * @return the date representing the end of the day
      */
     public static Date endDay(final Date date) {
-        Calendar calendar = CALENDAR;
-        synchronized (calendar) {
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
-            calendar.set(Calendar.SECOND, 59);
-            calendar.set(Calendar.MILLISECOND, 999);
-            return calendar.getTime();
-        }
+        return endDay(Calendar.getInstance(), date);
     }
 
     /**
@@ -90,7 +70,7 @@ public final class Dates {
      * @return the date representing the start of the current day
      */
     public static Date startToday() {
-        return startDay(new Date());
+        return startDay(Calendar.getInstance(), new Date());
     }
 
     /**
@@ -99,7 +79,7 @@ public final class Dates {
      * @return the date representing the end of the current day
      */
     public static Date endToday() {
-        return endDay(new Date());
+        return endDay(Calendar.getInstance(), new Date());
     }
 
     /**
@@ -110,7 +90,8 @@ public final class Dates {
      * @return whether the two dates are the same day
      */
     public static boolean equalsDay(final Date d1, final Date d2) {
-        return startDay(d1).getTime() == startDay(d2).getTime();
+        Calendar calendar = Calendar.getInstance();
+        return startDay(calendar, d1).getTime() == startDay(calendar, d2).getTime();
     }
 
     /**
@@ -120,7 +101,8 @@ public final class Dates {
      * @return whether the date is the same as the current day
      */
     public static boolean isToday(final Date date) {
-        return startDay(date).getTime() == startToday().getTime();
+        Calendar calendar = Calendar.getInstance();
+        return startDay(calendar, date).getTime() == startDay(calendar, new Date()).getTime();
     }
 
     /**
@@ -164,16 +146,14 @@ public final class Dates {
      * @return the number of days
      */
     public static int daysBetween(final Date startDate, final Date endDate) {
-        Calendar calendar = CALENDAR;
-        synchronized (calendar) {
-            int delta = 0;
-            Date startDay = startDay(startDate);
-            Date endDay = startDay(endDate);
-            for (calendar.setTime(startDay); calendar.getTime().before(endDay); calendar.add(Calendar.DATE, 1)) {
-                ++delta;
-            }
-            return delta;
+        int delta = 0;
+        Calendar calendar = Calendar.getInstance();
+        Date startDay = startDay(calendar, startDate);
+        Date endDay = startDay(calendar, endDate);
+        for (calendar.setTime(startDay); calendar.getTime().before(endDay); calendar.add(Calendar.DATE, 1)) {
+            ++delta;
         }
+        return delta;
     }
 
     /**
@@ -184,16 +164,14 @@ public final class Dates {
      * @return the dates between two dates
      */
     public static List<Date> datesBetween(final Date startDate, final Date endDate) {
-        Calendar calendar = CALENDAR;
-        synchronized (calendar) {
-            List<Date> dates = new ArrayList<>();
-            Date startDay = startDay(startDate);
-            Date endDay = endDay(endDate);
-            for (calendar.setTime(startDay); calendar.getTime().before(endDay); calendar.add(Calendar.DATE, 1)) {
-                dates.add(calendar.getTime());
-            }
-            return dates;
+        Calendar calendar = Calendar.getInstance();
+        List<Date> dates = new ArrayList<>();
+        Date startDay = startDay(calendar, startDate);
+        Date endDay = endDay(calendar, endDate);
+        for (calendar.setTime(startDay); calendar.getTime().before(endDay); calendar.add(Calendar.DATE, 1)) {
+            dates.add(calendar.getTime());
         }
+        return dates;
     }
 
     /**
@@ -214,11 +192,41 @@ public final class Dates {
      * @return the date with the number of days added
      */
     public static Date addDays(final Date date, final int days) {
-        Calendar calendar = CALENDAR;
-        synchronized (calendar) {
-            calendar.setTime(date);
-            calendar.add(Calendar.DATE, days);
-            return calendar.getTime();
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, days);
+        return calendar.getTime();
+    }
+
+    /**
+     * Get a date representing the start of a day.
+     *
+     * @param calendar the calendar to use
+     * @param date the day to get the start of
+     * @return the date representing the start of the day
+     */
+    private static Date startDay(final Calendar calendar, final Date date) {
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * Get a date representing the end of a day.
+     *
+     * @param calendar the calendar to use
+     * @param date the day to get the end of
+     * @return the date representing the end of the day
+     */
+    private static Date endDay(final Calendar calendar, final Date date) {
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
     }
 }
