@@ -34,6 +34,14 @@ public class XmlWriter implements Closeable, Flushable {
      */
     public static final int CR_CHARACTER = 13;
     /**
+     * The space character (ASCII decimal value).
+     */
+    public static final int SPACE_CHARACTER = 32;
+    /**
+     * The tilde character (ASCII decimal value).
+     */
+    public static final int TILDE_CHARACTER = 126;
+    /**
      * The default encoding.
      */
     private static final String DEFAULT_ENCODING = "UTF-8";
@@ -490,7 +498,7 @@ public class XmlWriter implements Closeable, Flushable {
                 }
                 break;
             case '"':
-                if (!doubleQuote) {
+                if (doubleQuote) {
                     if (buf == null) {
                         buf = new StringBuilder();
                         buf.append(arr, 0, i);
@@ -501,7 +509,7 @@ public class XmlWriter implements Closeable, Flushable {
                 }
                 break;
             default:
-                if (c > 127 || (c < 32 && c != TAB_CHARACTER && c != LF_CHARACTER && c != CR_CHARACTER)) {
+                if (c > TILDE_CHARACTER || (c < SPACE_CHARACTER && c != TAB_CHARACTER && c != LF_CHARACTER && c != CR_CHARACTER)) {
                     if (buf == null) {
                         buf = new StringBuilder();
                         buf.append(arr, 0, i);
