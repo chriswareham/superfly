@@ -7,6 +7,7 @@
 package net.chriswareham.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +97,17 @@ public abstract class DefaultTableModel<T> extends BaseTableModel {
         int ri = rows.size();
         rows.addAll(r);
         fireTableRowsInserted(ri, ri + r.size() - 1);
+    }
+
+    /**
+     * Add rows to the model.
+     *
+     * @param r the rows to add
+     */
+    public void addRows(final T[] r) {
+        int ri = rows.size();
+        rows.addAll(Arrays.asList(r));
+        fireTableRowsInserted(ri, ri + r.length - 1);
     }
 
     /**
