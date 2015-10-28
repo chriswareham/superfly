@@ -98,8 +98,8 @@ public class ImagePanel extends JPanel {
         c.gridx++;
         scaleSlider = new JSlider(1, 100, 100);
         scaleSlider.addChangeListener((final ChangeEvent event) -> {
-            imageComponent.setScale(scaleSlider.getValue() / 100.0);
-        });
+                imageComponent.setScale(scaleSlider.getValue() / 100.0);
+            });
         scaleSlider.setEnabled(false);
         add(scaleSlider, c);
 
@@ -107,9 +107,9 @@ public class ImagePanel extends JPanel {
         c.gridx++;
         resizeButton = new JButton("Resize");
         resizeButton.addActionListener((final ActionEvent event) -> {
-            imageComponent.cropImage();
-            scaleSlider.setValue(100);
-        });
+                imageComponent.cropImage();
+                scaleSlider.setValue(100);
+            });
         resizeButton.setEnabled(false);
         add(resizeButton, c);
 

@@ -189,12 +189,12 @@ public class DatePicker extends JDialog {
         monthComboBox = new JComboBox<>(MONTHS);
         monthComboBox.setSelectedIndex(mm);
         monthComboBox.addActionListener((final ActionEvent event) -> {
-            int i = monthComboBox.getSelectedIndex();
-            if (i > -1) {
-                mm = i;
-                update();
-            }
-        });
+                int i = monthComboBox.getSelectedIndex();
+                if (i > -1) {
+                    mm = i;
+                    update();
+                }
+            });
         panel.add(monthComboBox);
 
         // year combo box
@@ -205,12 +205,12 @@ public class DatePicker extends JDialog {
         }
         yearComboBox.setSelectedItem(yy);
         yearComboBox.addActionListener((final ActionEvent event) -> {
-            int i = yearComboBox.getSelectedIndex();
-            if (i > -1) {
-                yy = yearComboBox.getItemAt(i);
-                update();
-            }
-        });
+                int i = yearComboBox.getSelectedIndex();
+                if (i > -1) {
+                    yy = yearComboBox.getItemAt(i);
+                    update();
+                }
+            });
         panel.add(yearComboBox);
 
         // calandar button panel
@@ -252,17 +252,17 @@ public class DatePicker extends JDialog {
 
         JButton button = new JButton(SELECT);
         button.addActionListener((final ActionEvent event) -> {
-            fireDatePicked(calendar.getTime());
-            setVisible(false);
-            dispose();
-        });
+                fireDatePicked(calendar.getTime());
+                setVisible(false);
+                dispose();
+            });
         panel.add(button);
 
         button = new JButton(CANCEL);
         button.addActionListener((final ActionEvent event) -> {
-            setVisible(false);
-            dispose();
-        });
+                setVisible(false);
+                dispose();
+            });
         panel.add(button);
     }
 

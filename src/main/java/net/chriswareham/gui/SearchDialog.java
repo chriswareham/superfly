@@ -161,14 +161,14 @@ public class SearchDialog extends JDialog {
 
         JButton button = new JButton("Search");
         button.addActionListener((final ActionEvent event) -> {
-            search();
-        });
+                search();
+            });
         buttonPanel.add(button);
 
         button = new JButton("Close");
         button.addActionListener((final ActionEvent event) -> {
-            close();
-        });
+                close();
+            });
         buttonPanel.add(button);
 
         pack();

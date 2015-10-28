@@ -78,8 +78,8 @@ public class JsonDialog extends JDialog {
 
         JButton button = new JButton("Close");
         button.addActionListener((final ActionEvent event) -> {
-            close();
-        });
+                close();
+            });
         buttonPanel.add(button);
     }
 
@@ -161,7 +161,7 @@ public class JsonDialog extends JDialog {
                     parentNode.add(treeNode);
                 }
             }
-         }
+        }
 
         /**
          * Parse a JSON array.

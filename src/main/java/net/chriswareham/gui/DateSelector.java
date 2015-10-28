@@ -119,15 +119,15 @@ public class DateSelector extends JPanel {
         c.gridx++;
         selectButton = new JButton(SELECT_DATE_ICON);
         selectButton.addActionListener((final ActionEvent event) -> {
-            pickDate();
-        });
+                pickDate();
+            });
         add(selectButton, c);
 
         c.gridx++;
         clearButton = new JButton(CLEAR_DATE_ICON);
         clearButton.addActionListener((final ActionEvent event) -> {
-            setDate(null);
-        });
+                setDate(null);
+            });
         clearButton.setEnabled(false);
         add(clearButton, c);
     }
@@ -138,8 +138,8 @@ public class DateSelector extends JPanel {
     private void pickDate() {
         DatePicker datePicker = new DatePicker(date);
         datePicker.addDatePickerListener((final Date d) -> {
-            setDate(d);
-        });
+                setDate(d);
+            });
         datePicker.setLocationRelativeTo(selectButton);
         datePicker.setVisible(true);
     }

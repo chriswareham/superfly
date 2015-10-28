@@ -84,8 +84,8 @@ public class XmlDialog extends JDialog {
 
         JButton button = new JButton("Close");
         button.addActionListener((final ActionEvent event) -> {
-            close();
-        });
+                close();
+            });
         buttonPanel.add(button);
     }
 

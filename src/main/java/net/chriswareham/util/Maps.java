@@ -41,8 +41,7 @@ public final class Maps {
      * @param <K> the type of the map keys
      * @param <V> the type of the map values
      * @param map the source map to make unmodifiable
-     * @return an empty map if the source map is null, or an unmodifiable
-     * version of the source map
+     * @return an empty map if the source map is null, or an unmodifiable version of the source map
      */
     public static <K, V> Map<K, V> unmodifiable(final Map<K, V> map) {
         return map != null ? Collections.unmodifiableMap(map) : Collections.emptyMap();

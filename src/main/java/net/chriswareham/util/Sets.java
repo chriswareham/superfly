@@ -40,8 +40,7 @@ public final class Sets {
      *
      * @param <T> the type of the set elements
      * @param set the source set to make unmodifiable
-     * @return an empty set if the source set is null, or an unmodifiable
-     * version of the source set
+     * @return an empty set if the source set is null, or an unmodifiable version of the source set
      */
     public static <T> Set<T> unmodifiable(final Set<T> set) {
         return set != null ? Collections.unmodifiableSet(set) : Collections.emptySet();

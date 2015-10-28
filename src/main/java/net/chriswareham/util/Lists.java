@@ -39,8 +39,7 @@ public final class Lists {
      *
      * @param <T> the type of the list elements
      * @param list the source list to make unmodifiable
-     * @return an empty list if the source list is null, or an unmodifiable
-     * version of the source list
+     * @return an empty list if the source list is null, or an unmodifiable version of the source list
      */
     public static <T> List<T> unmodifiable(final List<T> list) {
         return list != null ? Collections.unmodifiableList(list) : Collections.emptyList();

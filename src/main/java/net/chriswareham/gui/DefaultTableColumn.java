@@ -15,13 +15,13 @@ import javax.swing.table.TableColumn;
  */
 public abstract class DefaultTableColumn extends TableColumn {
     /**
-     * The serial version UID.
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * The default column width.
      */
     public static final int DEFAULT_TABLE_COLUMN_WIDTH = 75;
+    /**
+     * The serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * The name of the column.
