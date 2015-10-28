@@ -35,6 +35,38 @@ public final class Dates {
     }
 
     /**
+     * Copy a date.
+     *
+     * @param src the source date to copy the time value from
+     * @return null if the source date is null, or a copy of the source date
+     */
+    public static Date copy(final Date src) {
+        if (src == null) {
+            return null;
+        }
+        return new Date(src.getTime());
+    }
+
+    /**
+     * Copy a date.
+     *
+     * @param src the source date to copy the time value from
+     * @param dst the destination date to copy the time value to
+     * @return null if the source date is null, a copy of the source date if the
+     * destination date is null, or the updated destination date
+     */
+    public static Date copy(final Date src, final Date dst) {
+        if (src == null) {
+            return null;
+        }
+        if (dst == null) {
+            return new Date(src.getTime());
+        }
+        dst.setTime(src.getTime());
+        return dst;
+    }
+
+    /**
      * Get whether a date is in daylight time for the time zone of the host.
      *
      * @param date the date
