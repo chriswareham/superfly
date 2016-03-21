@@ -120,7 +120,7 @@ public class CsvView<T> implements View {
             response.setHeader(CONTENT_DISPOSITION_HEADER, CONTENT_DISPOSITION_PREFIX + models.get(filenameModel));
 
 
-            CsvWriter writer = new CsvWriter(response.getWriter());
+            CsvWriter writer = new CsvWriter(response.getOutputStream());
 
             if (dateHeader) {
                 DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
