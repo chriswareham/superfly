@@ -49,8 +49,8 @@ public final class ComponentUtils {
      * @return the setter methods keyed by name
      * @throws ComponentException if an error occurs
      */
-    public static Map<String, Method> getSetters(final Class<?> type) throws ComponentException {
-        Map<String, Method> setters = new HashMap<>();
+    public static Map<String, Map<Class<?>, Method>> getSetters(final Class<?> type) throws ComponentException {
+        Map<String, Map<Class<?>, Method>> setters = new HashMap<>();
 
         for (Method method : type.getMethods()) {
             String name = method.getName();
@@ -71,11 +71,11 @@ public final class ComponentUtils {
 
                 String setterName = parameterName(name);
 
-                if (setters.containsKey(setterName)) {
-                    throw new ComponentException("Error getting setter '" + name + "' for '" + type.getName() + "', overloaded name");
+                if (!setters.containsKey(setterName)) {
+                    setters.put(setterName, new HashMap<>());
                 }
 
-                setters.put(setterName, method);
+                setters.get(setterName).put(types[0], method);
             }
         }
 
@@ -168,6 +168,26 @@ public final class ComponentUtils {
      * Set a component reference.
      *
      * @param component the component to set the reference for
+     * @param setters the setter methods
+     * @param name the reference name
+     * @param reference the component the reference refers to
+     * @throws ComponentException if an error occurs
+     */
+    public static void setReference(final Object component, final Map<Class<?>, Method> setters, final String name, final Object reference) throws ComponentException {
+        for (Class<?> type : setters.keySet()) {
+            if (type.isAssignableFrom(reference.getClass())) {
+                Method setter = setters.get(type);
+                ComponentUtils.setReference(component, setter, name, reference);
+                return;
+            }
+        }
+        throw new ComponentException("Error setting reference '" + name + "' for '" + component.getClass().getName() + "', no suitable setter found");
+    }
+
+    /**
+     * Set a component reference.
+     *
+     * @param component the component to set the reference for
      * @param setter the setter method
      * @param name the reference name
      * @param reference the component the reference refers to
@@ -183,6 +203,26 @@ public final class ComponentUtils {
         } catch (ReflectiveOperationException | IllegalArgumentException exception) {
             throw new ComponentException("Error setting reference '" + name + "' for '" + component.getClass().getName() + "', failed to invoke setter", exception);
         }
+    }
+
+    /**
+     * Set a component property.
+     *
+     * @param component the component to set the property for
+     * @param setters the setter methods
+     * @param name the property name
+     * @param value the property value
+     * @throws ComponentException if an error occurs
+     */
+    public static void setProperty(final Object component, final Map<Class<?>, Method> setters, final String name, final String value) throws ComponentException {
+        for (Class<?> type : setters.keySet()) {
+            if (type.isAssignableFrom(String.class)) {
+                Method setter = setters.get(type);
+                ComponentUtils.setProperty(component, setter, name, value);
+                return;
+            }
+        }
+        throw new ComponentException("Error setting property '" + name + "' for '" + component.getClass().getName() + "', no suitable setter found");
     }
 
     /**

@@ -269,18 +269,18 @@ public class DefaultComponentFactory implements ComponentFactory, LifecycleCompo
 
         Object component = instantiateComponent(parameters);
 
-        Map<String, Method> setters = ComponentUtils.getSetters(parameters.getType());
+        Map<String, Map<Class<?>, Method>> setters = ComponentUtils.getSetters(parameters.getType());
 
         for (String name : parameters.getPropertyNames()) {
-            Method setter = setters.get(name);
             String value = parameters.getProperty(name);
-            ComponentUtils.setProperty(component, setter, name, value);
+
+            ComponentUtils.setProperty(component, setters.get(name), name, value);
         }
 
         for (String name : parameters.getReferenceNames()) {
-            Method setter = setters.get(name);
             Object reference = getComponent(parameters.getReference(name));
-            ComponentUtils.setReference(component, setter, name, reference);
+
+            ComponentUtils.setReference(component, setters.get(name), name, reference);
         }
 
         Map<String, Method> adders = ComponentUtils.getAdders(parameters.getType());
