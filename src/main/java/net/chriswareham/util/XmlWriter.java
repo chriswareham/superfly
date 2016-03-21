@@ -16,7 +16,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
- * Convenience class for writing an XML stream.
+ * Convenience class for writing an XML stream. Instances of this class are not
+ * thread safe and should not be reused.
  *
  * @author Chris Wareham
  */
@@ -44,7 +45,7 @@ public class XmlWriter implements Closeable, Flushable {
     /**
      * The default encoding.
      */
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    public static final String DEFAULT_ENCODING = "UTF-8";
 
     /**
      * The writer states.

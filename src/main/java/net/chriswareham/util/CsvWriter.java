@@ -9,11 +9,13 @@ package net.chriswareham.util;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 /**
- * This class provides a writer for CSV files.
+ * Convenience class for writing a CSV stream. Instances of this class are not
+ * thread safe and should not be reused.
  *
  * @author Chris Wareham
  */
@@ -48,9 +50,9 @@ public class CsvWriter implements Closeable, Flushable {
     public static final int CR_CHARACTER = 13;
 
     /**
-     * The writer to output the data to.
+     * The stream to write to.
      */
-    private Writer writer;
+    private OutputStreamWriter out;
     /**
      * The separator character.
      */
@@ -71,23 +73,23 @@ public class CsvWriter implements Closeable, Flushable {
     /**
      * Construct an instance of a writer for CSV files.
      *
-     * @param w the underlying writer.
+     * @param os the stream to write to
      */
-    public CsvWriter(final Writer w) {
-        this(w, DEFAULT_SEPARATOR_CHARACTER, DEFAULT_QUOTE_CHARACTER, DEFAULT_QUOTE_ESCAPE_CHARACTER, DEFAULT_LINE_END_CHARACTERS);
+    public CsvWriter(final OutputStream os) {
+        this(os, DEFAULT_SEPARATOR_CHARACTER, DEFAULT_QUOTE_CHARACTER, DEFAULT_QUOTE_ESCAPE_CHARACTER, DEFAULT_LINE_END_CHARACTERS);
     }
 
     /**
      * Construct an instance of a writer for CSV files.
      *
-     * @param w the underlying writer.
+     * @param os the stream to write to
      * @param s the separator character
      * @param q the quote character
      * @param qe the quote escape character
      * @param le the line end characters
      */
-    public CsvWriter(final Writer w, final char s, final char q, final char qe, final String le) {
-        writer = w;
+    public CsvWriter(final OutputStream os, final char s, final char q, final char qe, final String le) {
+        out = new OutputStreamWriter(os);
         separator = s;
         quote = q;
         quoteEscape = qe;
@@ -131,10 +133,10 @@ public class CsvWriter implements Closeable, Flushable {
                 }
             }
 
-            writer.write(buf.toString());
+            out.write(buf.toString());
         }
 
-        writer.write(lineEnd);
+        out.write(lineEnd);
     }
 
     /**
@@ -142,7 +144,7 @@ public class CsvWriter implements Closeable, Flushable {
      */
     @Override
     public void flush() throws IOException {
-        writer.flush();
+        out.flush();
     }
 
     /**
@@ -150,7 +152,7 @@ public class CsvWriter implements Closeable, Flushable {
      */
     @Override
     public void close() throws IOException {
-        writer.flush();
-        writer.close();
+        out.flush();
+        out.close();
     }
 }
