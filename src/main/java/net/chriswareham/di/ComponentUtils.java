@@ -11,6 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.chriswareham.util.Booleans;
+import net.chriswareham.util.Doubles;
+import net.chriswareham.util.Floats;
+import net.chriswareham.util.Integers;
+import net.chriswareham.util.Longs;
+
 /**
  * This class provides utilities for introspecting components.
  *
@@ -216,7 +222,7 @@ public final class ComponentUtils {
      */
     public static void setProperty(final Object component, final Map<Class<?>, Method> setters, final String name, final String value) throws ComponentException {
         for (Class<?> type : setters.keySet()) {
-            if (type.isAssignableFrom(String.class)) {
+            if (isAssignableFrom(type, value)) {
                 Method setter = setters.get(type);
                 ComponentUtils.setProperty(component, setter, name, value);
                 return;
@@ -415,5 +421,34 @@ public final class ComponentUtils {
             return Double.valueOf(value);
         }
         throw new IllegalArgumentException("Unsupported type " + type.getName());
+    }
+
+    /**
+     * Get whether a string value can be converted to a primitive type.
+     *
+     * @param type the primitive type
+     * @param value the string value
+     * @return whether the string value can be converted to a primitive type
+     */
+    private static boolean isAssignableFrom(final Class<?> type, final String value) {
+        if (type == String.class) {
+            return true;
+        }
+        if (type == boolean.class) {
+            return Booleans.isBoolean(value);
+        }
+        if (type == int.class) {
+            return Integers.isInteger(value);
+        }
+        if (type == long.class) {
+            return Longs.isLong(value);
+        }
+        if (type == float.class) {
+            return Floats.isFloat(value);
+        }
+        if (type == double.class) {
+            return Doubles.isDouble(value);
+        }
+        return false;
     }
 }
