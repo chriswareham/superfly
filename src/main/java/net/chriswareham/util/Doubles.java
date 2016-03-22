@@ -14,15 +14,28 @@ import java.util.regex.Pattern;
  * @author Chris Wareham
  */
 public final class Doubles {
+    /**
+     * Decimal digits pattern.
+     */
     private static final String DIGITS = "(\\p{Digit}+)";
+    /**
+     * Hexadecimal digits pattern.
+     */
     private static final String HEX_DIGITS = "(\\p{XDigit}+)";
-    // an exponent is 'e' or 'E' followed by an optionally
-    // signed decimal integer.
-    private static final String EXPONENT = "[eE][+-]?"+DIGITS;
-    private static final String REGEX =
-       "[+-]?(" +           // Optional sign character
-       "NaN|" +             // "NaN" string
-       "Infinity|" +        // "Infinity" string
+    /**
+     * The exponent pattern ('e' or 'E' followed by an optionally signed decimal integer).
+     */
+    private static final String EXPONENT = "[eE][+-]?" + DIGITS;
+    /**
+     * The double pattern.
+     */
+    private static final String DOUBLE =
+       // Optional sign character
+       "[+-]?("
+       // "NaN" string
+       + "NaN|"
+       // "Infinity" string
+       + "Infinity|"
 
        // A decimal floating-point string representing a finite positive
        // number without a leading sign has at most five basic pieces:
@@ -35,25 +48,26 @@ public final class Doubles {
        // The Java Language Specification.
 
        // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
-       "(((" + DIGITS + "(\\.)?(" + DIGITS + "?)(" + EXPONENT + ")?)|" +
+       + "(((" + DIGITS + "(\\.)?(" + DIGITS + "?)(" + EXPONENT + ")?)|"
 
        // . Digits ExponentPart_opt FloatTypeSuffix_opt
-       "(\\.(" + DIGITS + ")(" + EXPONENT + ")?)|" +
+       + "(\\.(" + DIGITS + ")(" + EXPONENT + ")?)|"
 
        // Hexadecimal strings
-       "((" +
-        // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
-        "(0[xX]" + HEX_DIGITS + "(\\.)?)|" +
+       + "(("
+       // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+       + "(0[xX]" + HEX_DIGITS + "(\\.)?)|"
 
-        // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
-        "(0[xX]" + HEX_DIGITS + "?(\\.)" + HEX_DIGITS + ")" +
+       // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
+       + "(0[xX]" + HEX_DIGITS + "?(\\.)" + HEX_DIGITS + ")"
 
-        ")[pP][+-]?" + DIGITS + "))" +
-       "[fFdD]?))";
+       + ")[pP][+-]?" + DIGITS + "))"
+       + "[fFdD]?))";
+
     /**
      * The radix.
      */
-    private static final Pattern DOUBLE_PATTERN = Pattern.compile(REGEX);
+    private static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE);
 
     /**
      * Utility class - no public constructor.

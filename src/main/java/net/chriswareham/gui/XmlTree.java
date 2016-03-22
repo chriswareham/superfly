@@ -43,6 +43,13 @@ public class XmlTree extends JTree {
         renderer.setLeafIcon(null);
     }
 
+    /**
+     * Set the XML to display.
+     *
+     * @param xml the XML to display
+     * @throws IOException if an occurs reading the XML
+     * @throws SAXException if an error occurs parsing the XML
+     */
     public void setXml(final String xml) throws IOException, SAXException {
         Handler handler = new Handler();
 
