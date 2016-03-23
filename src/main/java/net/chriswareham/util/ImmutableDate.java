@@ -20,6 +20,13 @@ public class ImmutableDate extends Date {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Construct an immutable date object for the current time and date.
+     */
+    public ImmutableDate() {
+        super();
+    }
+
+    /**
      * Construct an immutable date object.
      *
      * @param date the milliseconds since January 1, 1970, 00:00:00 GMT
