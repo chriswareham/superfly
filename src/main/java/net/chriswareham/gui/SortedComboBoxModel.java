@@ -119,6 +119,15 @@ public class SortedComboBoxModel<T extends Comparable<? super T>> extends Abstra
     }
 
     /**
+     * Get all the rows from the model.
+     *
+     * @return all the rows from the model
+     */
+    public List<T> getRows() {
+        return Collections.unmodifiableList(rows);
+    }
+
+	/**
      * Add a row to the model.
      *
      * @param r the row to add

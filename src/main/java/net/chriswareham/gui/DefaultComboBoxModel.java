@@ -9,6 +9,7 @@ package net.chriswareham.gui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -117,6 +118,15 @@ public class DefaultComboBoxModel<T> extends AbstractListModel<T> implements Com
     }
 
     /**
+     * Get all the rows from the model.
+     *
+     * @return all the rows from the model
+     */
+    public List<T> getRows() {
+        return Collections.unmodifiableList(rows);
+    }
+
+	/**
      * Add a row to the model.
      *
      * @param r the row to add
