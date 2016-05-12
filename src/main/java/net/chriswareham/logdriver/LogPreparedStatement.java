@@ -312,6 +312,7 @@ public class LogPreparedStatement extends LogStatement implements PreparedStatem
 
     /**
      * {@inheritDoc}
+     * @deprecated Use {@code setCharacterStream}
      */
     @Override
     @Deprecated

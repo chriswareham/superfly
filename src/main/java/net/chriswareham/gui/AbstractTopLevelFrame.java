@@ -18,6 +18,8 @@ import net.chriswareham.di.ComponentFactory;
 
 /**
  * This class provides an application top level frame.
+ *
+ * @author Chris Wareham
  */
 public abstract class AbstractTopLevelFrame extends AbstractFrame {
     /**

@@ -19,7 +19,7 @@ public class CsvStringWriter extends CsvWriter {
     /**
      * The stream to write to.
      */
-    private final ByteArrayOutputStream os;
+    private final ByteArrayOutputStream outputStream;
 
     /**
      * Construct an instance of a writer for CSV files.
@@ -51,7 +51,7 @@ public class CsvStringWriter extends CsvWriter {
      */
     private CsvStringWriter(final ByteArrayOutputStream os, final char s, final char q, final char qe, final String le) {
         super(os, s, q, qe, le);
-        this.os = os;
+        this.outputStream = os;
     }
 
     /**
@@ -61,6 +61,6 @@ public class CsvStringWriter extends CsvWriter {
      * @throws IOException if an input or output error occurs
      */
     public String toCsv() throws IOException {
-        return os.toString();
+        return outputStream.toString();
     }
 }

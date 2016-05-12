@@ -6,7 +6,6 @@
 
 package net.chriswareham.gui;
 
-import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -17,6 +16,8 @@ import net.chriswareham.di.ComponentFactory;
 
 /**
  * This class provides an application sub-frame.
+ *
+ * @author Chris Wareham
  */
 public abstract class AbstractFrame extends JFrame {
     /**
@@ -33,10 +34,10 @@ public abstract class AbstractFrame extends JFrame {
      * Construct a new instance of the application sub-frame.
      *
      * @param parent the parent window
-     * @param componentFactory the component factory
+     * @param cf the component factory
      */
-    public AbstractFrame(final AbstractFrame parent, final ComponentFactory componentFactory) {
-        this.componentFactory = componentFactory;
+    public AbstractFrame(final AbstractFrame parent, final ComponentFactory cf) {
+        this.componentFactory = cf;
         doCreateInterface();
         doPopulateInterface(parent);
     }

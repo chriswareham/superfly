@@ -32,22 +32,22 @@ public class DateField extends JFormattedTextField {
     /**
      * Construct an instance of the date field.
      *
-     * @param format the date format
+     * @param df the date format
      */
-    public DateField(final DateFormat format) {
-        super(format);
-        this.format = format;
+    public DateField(final DateFormat df) {
+        super(df);
+        this.format = df;
     }
 
     /**
      * Construct an instance of the date field.
      *
-     * @param format the date format
+     * @param df the date format
      * @param l preferred width of the date field in characters
      */
-    public DateField(final DateFormat format, final int l) {
-        super(format);
-        this.format = format;
+    public DateField(final DateFormat df, final int l) {
+        super(df);
+        this.format = df;
         setColumns(l);
     }
 
@@ -63,7 +63,7 @@ public class DateField extends JFormattedTextField {
             try {
                 date = format.parse(text);
             } catch (ParseException e) {
-                // shouldn't happen
+                date = null;
             }
         }
         return date;

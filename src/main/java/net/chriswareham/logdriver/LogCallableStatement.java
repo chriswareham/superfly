@@ -298,6 +298,7 @@ public class LogCallableStatement extends LogPreparedStatement implements Callab
 
     /**
      * {@inheritDoc}
+     * @deprecated Use {@code getBigDecimal(int parameterIndex)} or {@code getBigDecimal(String parameterName)}
      */
     @Override
     @Deprecated

@@ -12,6 +12,8 @@ import net.chriswareham.di.ComponentException;
 
 /**
  * This class provides a wrapper that handles errors for a callback.
+ *
+ * @author Chris Wareham
  */
 public abstract class AbstractCallback {
     /**
@@ -21,10 +23,11 @@ public abstract class AbstractCallback {
 
     /**
      * Construct a wrapper that handles errors for a callback.
-     * @param window
+     *
+     * @param w the window the callback is for
      */
-    public AbstractCallback(final AbstractFrame window) {
-        this.window = window;
+    public AbstractCallback(final AbstractFrame w) {
+        this.window = w;
     }
 
     /**

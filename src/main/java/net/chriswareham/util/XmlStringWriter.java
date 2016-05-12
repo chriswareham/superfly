@@ -19,7 +19,7 @@ public class XmlStringWriter extends XmlWriter {
     /**
      * The stream to write to.
      */
-    private final ByteArrayOutputStream os;
+    private final ByteArrayOutputStream outputStream;
 
     /**
      * Constructs a writer with the default UTF-8 output encoding.
@@ -65,7 +65,7 @@ public class XmlStringWriter extends XmlWriter {
      */
     private XmlStringWriter(final ByteArrayOutputStream os, final boolean dq, final String e) {
         super(os, dq, e);
-        this.os = os;
+        this.outputStream = os;
     }
 
     /**
@@ -75,6 +75,6 @@ public class XmlStringWriter extends XmlWriter {
      * @throws IOException if an input or output error occurs
      */
     public String toXml() throws IOException {
-        return os.toString(getEncoding());
+        return outputStream.toString(getEncoding());
     }
 }

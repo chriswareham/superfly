@@ -126,7 +126,7 @@ public class DefaultComboBoxModel<T> extends AbstractListModel<T> implements Com
         return Collections.unmodifiableList(rows);
     }
 
-	/**
+    /**
      * Add a row to the model.
      *
      * @param r the row to add
