@@ -7,7 +7,7 @@
 
     <groupId>net.chriswareham</groupId>
     <artifactId>superfly</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>Superfly Framework</name>
     <description>Superfly is a lightweight framework.</description>
